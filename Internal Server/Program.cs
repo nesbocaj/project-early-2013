@@ -25,7 +25,7 @@ namespace Internal_Server
             listener.Start();
             EndPoint remote = null;
 
-            while (true)
+            while(true)
             {
                 try
                 {
