@@ -17,7 +17,8 @@ namespace Forms_Client.View
         public MainWindow()
         {
             InitializeComponent();
-            _presenter = new Presenter.Presenter(this);
+            _presenter = Presenter.Presenter.GetInstance();
+            _presenter.Main = this;
         }
 
         private void OKButton_Click(object sender, EventArgs e)

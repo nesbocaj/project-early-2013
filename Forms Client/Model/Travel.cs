@@ -9,5 +9,9 @@ namespace Forms_Client.Model
     class Travel
     {
 
+        public string StartingLocation { get; set; }
+        public string[] Waypoints { get; set; }
+        public string EndLocation { get; set; }
+        public int Price { get; set; }
     }
 }

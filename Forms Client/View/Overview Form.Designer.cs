@@ -83,6 +83,7 @@
             this.Controls.Add(this.OKButton);
             this.Name = "Overview_Form";
             this.Text = "Overview_Form";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Overview_Form_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -91,9 +92,9 @@
         #endregion
 
         private System.Windows.Forms.Button OKButton;
-        private System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.Label DescriptionLabel;
         private System.Windows.Forms.Label PriceLabel;
+        private System.Windows.Forms.Button CancelButton;
 
     }
 }

@@ -8,25 +8,48 @@ namespace Forms_Client.Presenter
 {
     class Presenter
     {
-        private View.Overview_Form _overview = null;
-        private View.MainWindow _main = null;
-        public Presenter(View.MainWindow main)
+        private static Presenter _instance = null;
+
+        private bool _okButtonState = true;
+
+        private Presenter() { }
+
+        public static Presenter GetInstance()
         {
-            _main = main;
-            _overview = new View.Overview_Form();
+            if (_instance == null)
+            {
+                _instance = new Presenter();
+                _instance.Overview = new View.Overview_Form();
+            }
+
+            return _instance;
         }
+
+        public View.Overview_Form Overview { get; set; }
+        public View.MainWindow Main { get; set; }
 
         public void CallOverview()
         {
-            var arr = _main.ChosenCities();
+            var arr = Main.ChosenCities();
             if (arr[0] == "" || arr[1] == "")
                 MessageBox.Show("Du mangler at udfylde felterne", "FEJL!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             //else
-                _overview.Show();
+                Overview.Show();
         }
 
         public void ChangeOverview()
         {
+            if (_okButtonState == true)
+            {
+                Overview.SetCancelButtonVisibility(false);
+                _okButtonState = false;
+            }
+            else
+            {
+                Overview.Close();
+                Overview.SetCancelButtonVisibility(true);
+                _okButtonState = true;
+            }
 
         }
     }

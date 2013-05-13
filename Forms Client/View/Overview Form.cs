@@ -12,9 +12,12 @@ namespace Forms_Client.View
 {
     public partial class Overview_Form : Form
     {
+        private Presenter.Presenter _presenter = null;
+
         public Overview_Form()
         {
             InitializeComponent();
+            _presenter = Presenter.Presenter.GetInstance();
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -24,7 +27,17 @@ namespace Forms_Client.View
 
         private void OKButton_Click(object sender, EventArgs e)
         {
+            _presenter.ChangeOverview();
+        }
 
+        public void SetCancelButtonVisibility(bool visibility)
+        {
+            CancelButton.Visible = visibility;
+        }
+
+        private void Overview_Form_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _presenter.Overview = new Overview_Form();
         }
     }
 }
