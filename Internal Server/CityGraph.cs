@@ -15,8 +15,8 @@ namespace Internal_Server
     class CityGraph
     {
         private static CityGraph _instance;
-
         private List<Vertex> _vertices;
+        private static Random _randomizer = new Random();
 
         private CityGraph()
         {
@@ -38,12 +38,12 @@ namespace Internal_Server
                 cityName => _vertices.Add(new Vertex(cityName)));
         }
 
-        public void AddEdge(string fromValue, string toValue, decimal price)
+        public void AddEdge(string fromValue, string toValue)
         {
             Vertex from = _vertices.Find(v => v.CityName.Equals(fromValue));
             Vertex to = _vertices.Find(v => v.CityName.Equals(toValue));
 
-            Edge edge = new Edge(price, to);
+            Edge edge = new Edge(to);
 
             if (!from.Edges.Any(e => e.Endpoint.Equals(to)))
                 from.Add(edge);
@@ -84,12 +84,11 @@ namespace Internal_Server
 
             public Edge()
             {
-                
+                _price = _randomizer.Next(300, 1000);
             }
 
-            public Edge(decimal price, Vertex endpoint) : this()
+            public Edge(Vertex endpoint) : this()
             {
-                _price = price;
                 _endpoint = endpoint;
             }
 
