@@ -10,16 +10,36 @@ using System.Windows.Forms;
 
 namespace Forms_Client.View
 {
-    public partial class Form1 : Form
+    public partial class MainWindow : Form
     {
-        public Form1()
+        private readonly Presenter.Presenter _presenter = null;
+
+        public MainWindow()
         {
             InitializeComponent();
+            _presenter = new Presenter.Presenter(this);
         }
 
         private void OKButton_Click(object sender, EventArgs e)
         {
+            _presenter.CallOverview();
+        }
 
+        public string[] ChosenCities()
+        {
+            string from, to;
+
+            if (FromBox.Text == null)
+                from = "";
+            else
+                from = FromBox.Text;
+
+            if (ToBox.Text == null)
+                to = "";
+            else
+                to = ToBox.Text;
+            var arr = new String[] { from, to };
+            return arr;
         }
     }
 }

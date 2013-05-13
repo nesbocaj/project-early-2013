@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Forms_Client.Model
+namespace Forms_Client
 {
-    class Travel
+    interface IMainWindow
     {
-
     }
 }
