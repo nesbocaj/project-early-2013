@@ -82,9 +82,12 @@ namespace Internal_Server
             private decimal _price;
             private Vertex _endpoint;
 
-            public Edge() { }
+            public Edge()
+            {
+                
+            }
 
-            public Edge(decimal price, Vertex endpoint)
+            public Edge(decimal price, Vertex endpoint) : this()
             {
                 _price = price;
                 _endpoint = endpoint;
