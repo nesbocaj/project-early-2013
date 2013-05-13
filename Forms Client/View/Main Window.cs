@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Forms_Client
+namespace Forms_Client.View
 {
-    public partial class Overview_Form : Form
+    public partial class Form1 : Form
     {
-        public Overview_Form()
+        public Form1()
         {
             InitializeComponent();
+        }
+
+        private void OKButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

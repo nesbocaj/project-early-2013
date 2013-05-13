@@ -44,24 +44,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main Window.cs">
+    <Compile Include="Model\Travel.cs" />
+    <Compile Include="Presenter\Presenter.cs" />
+    <Compile Include="View\Main Window.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Main Window.Designer.cs">
+    <Compile Include="View\Main Window.Designer.cs">
       <DependentUpon>Main Window.cs</DependentUpon>
     </Compile>
-    <Compile Include="Overview Form.cs">
+    <Compile Include="View\Overview Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Overview Form.Designer.cs">
+    <Compile Include="View\Overview Form.Designer.cs">
       <DependentUpon>Overview Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Main Window.resx">
+    <EmbeddedResource Include="View\Main Window.resx">
       <DependentUpon>Main Window.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Overview Form.resx">
+    <EmbeddedResource Include="View\Overview Form.resx">
       <DependentUpon>Overview Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -86,6 +88,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,4 +1,4 @@
-﻿namespace Forms_Client
+﻿namespace Forms_Client.View
 {
     partial class Overview_Form
     {
