@@ -7,18 +7,18 @@ using TCP_Shared;
 
 namespace Internal_Server
 {
-    class ServerConnection : ITcpConnection
+    class TcpConnection : ITcpConnection
     {
-        private static ServerConnection _instance;
+        private static TcpConnection _instance;
 
-        private ServerConnection() { }
+        private TcpConnection() { }
 
-        public static ServerConnection Instance
+        public static TcpConnection Instance
         {
             get
             {
                 if (_instance == null)
-                    _instance = new ServerConnection();
+                    _instance = new TcpConnection();
                 return _instance;
             }
         }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TCP_Shared;
 
@@ -12,25 +13,69 @@ namespace Internal_Server
 {
     class Program
     {
-        static void Main(string[] args)
-        {
-            var connection = ServerConnection.Instance;
-            var listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 7000);
+        private TcpConnection _connection;
 
+        private Program()
+        {
+            _connection = TcpConnection.Instance;
+
+            Console.WriteLine("Airline Server");
+
+            var listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 7000);
             listener.Start();
+            EndPoint remote = null;
 
             while (true)
             {
-                var stream = new NetworkStream(listener.AcceptSocket());
-                var writer = new BinaryWriter(stream);
-                var reader = new BinaryReader(stream);
+                try
+                {
+                    var current = listener.AcceptSocket();
+                    remote = current.RemoteEndPoint;
 
-                var response = connection.Request<string>(reader.ReadString());
-                writer.Write(response.Message);
-                Console.WriteLine(response);
+                    Console.WriteLine("200 OK - Connection accepted from {0}",
+                        remote);
 
-                stream.Close();
+                    var clientThread = new Thread(() => ManageClient(current));
+                    clientThread.Start();
+                }
+                catch (SocketException se)
+                {
+                    if (remote == null)
+                        Console.WriteLine("410 GONE - Connection not established");
+                    else
+                        Console.WriteLine("410 GONE - Connection with {0} was interrupted",
+                            remote);
+                }
             }
+        }
+
+        static void Main(string[] args)
+        {
+            new Program();
+        }
+
+        void ManageClient(Socket currentSocket)
+        {
+            NetworkStream stream = new NetworkStream(currentSocket);
+            BinaryWriter writer = new BinaryWriter(stream);
+            BinaryReader reader = new BinaryReader(stream);
+
+            Response<string> response = null;
+
+            try
+            {
+                response = _connection.Request<string>(reader.ReadString());
+                writer.Write(response.Value);
+                writer.Write(response.Message.Split('-')[1].Trim());
+            }
+            catch
+            {
+                Console.WriteLine("400 - BAD REQUEST");
+            }
+
+            Console.WriteLine(response.Message);
+
+            stream.Close();
         }
     }
 }
