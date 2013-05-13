@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TCP_Shared;
 
 namespace Internal_Server
 {
-    class ServerConnection : IServerConnection
+    class ServerConnection : ITcpConnection
     {
         private static ServerConnection _instance;
 
@@ -22,9 +23,9 @@ namespace Internal_Server
             }
         }
 
-        public string Request(string command)
+        public Response<T> Request<T>(string command)
         {
-            string response = "";
+            Response<T> response = new Response<T>();
 
             return response;
         }

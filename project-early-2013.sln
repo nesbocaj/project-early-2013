@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internal Server", "Internal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forms Client", "Forms Client\Forms Client.csproj", "{ACEB518C-B304-44C3-858B-9D7C9AC8FF5C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCP Shared", "TCP Shared\TCP Shared.csproj", "{911DD4CC-603D-45A5-98FA-699A186BDCF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{ACEB518C-B304-44C3-858B-9D7C9AC8FF5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACEB518C-B304-44C3-858B-9D7C9AC8FF5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACEB518C-B304-44C3-858B-9D7C9AC8FF5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{911DD4CC-603D-45A5-98FA-699A186BDCF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{911DD4CC-603D-45A5-98FA-699A186BDCF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{911DD4CC-603D-45A5-98FA-699A186BDCF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{911DD4CC-603D-45A5-98FA-699A186BDCF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

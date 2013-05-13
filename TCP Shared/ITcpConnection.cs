@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Internal_Server
+namespace TCP_Shared
 {
-    class IServerConnection
+    public interface ITcpConnection
     {
-        string Request(string command);
+        Response<T> Request<T>(string command);
     }
 }

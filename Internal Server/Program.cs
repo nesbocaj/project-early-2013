@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using TCP_Shared;
 
 namespace Internal_Server
 {
@@ -13,19 +14,19 @@ namespace Internal_Server
     {
         static void Main(string[] args)
         {
-            ServerConnection connection = ServerConnection.Instance;
-            TcpListener listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 7000);
+            var connection = ServerConnection.Instance;
+            var listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 7000);
 
             listener.Start();
 
             while (true)
             {
-                NetworkStream stream = new NetworkStream(listener.AcceptSocket());
-                BinaryWriter writer = new BinaryWriter(stream);
-                BinaryReader reader = new BinaryReader(stream);
+                var stream = new NetworkStream(listener.AcceptSocket());
+                var writer = new BinaryWriter(stream);
+                var reader = new BinaryReader(stream);
 
-                string response = connection.Request(reader.ReadString());
-                writer.Write(response);
+                var response = connection.Request<string>(reader.ReadString());
+                writer.Write(response.Message);
                 Console.WriteLine(response);
 
                 stream.Close();
