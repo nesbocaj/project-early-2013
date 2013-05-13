@@ -41,5 +41,10 @@ namespace Forms_Client.View
             var arr = new String[] { from, to };
             return arr;
         }
+
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -21,8 +21,13 @@ namespace Forms_Client.Presenter
             var arr = _main.ChosenCities();
             if (arr[0] == "" || arr[1] == "")
                 MessageBox.Show("Du mangler at udfylde felterne", "FEJL!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else
+            //else
                 _overview.Show();
+        }
+
+        public void ChangeOverview()
+        {
+
         }
     }
 }
