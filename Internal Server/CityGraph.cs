@@ -54,7 +54,7 @@ namespace Internal_Server
         {
             foreach (var temp in _vertices)
             {
-                var price = (decimal)_randomizer.Next(300, 1000);
+                decimal price = _randomizer.Next(300, 1000);
 
                 if (!vertex.Edges.Exists(e => e.Endpoint.Equals(temp)))
                     vertex.Edges.Add(new Edge(temp, price));
@@ -67,6 +67,17 @@ namespace Internal_Server
         public string[] ListDestinations(string initial)
         {
             return _vertices.Select(v => v.CityName).Where(c => c != initial).ToArray();
+        }
+
+        public void ApplyDiscount(string waypointA, string waypointB)
+        {
+            decimal price = _randomizer.Next(100, 200);
+
+            var vertexA = _vertices.Find(v => v.CityName.Equals(waypointA));
+            var vertexB = _vertices.Find(v => v.CityName.Equals(waypointB));
+
+            vertexA.Edges.Single(e => e.Endpoint.Equals(vertexB)).Price = price;
+            vertexB.Edges.Single(e => e.Endpoint.Equals(vertexA)).Price = price;
         }
 
         private class Vertex
@@ -101,8 +112,12 @@ namespace Internal_Server
         {
             private decimal _price;
             private Vertex _endpoint;
+            private bool _availability;
 
-            public Edge() { }
+            public Edge()
+            {
+                _availability = true;
+            }
 
             public Edge(Vertex endpoint, decimal price) : this()
             {
@@ -120,6 +135,12 @@ namespace Internal_Server
             {
                 get { return _endpoint; }
                 set { _endpoint = value; }
+            }
+
+            public bool Availability
+            {
+                get { return _availability; }
+                set { _availability = value; }
             }
         }
     }
