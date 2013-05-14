@@ -64,6 +64,18 @@ namespace Internal_Server
             }
         }
 
+        public void RemoveEdges(string waypointA, string waypointB)
+        {
+            var vertexA = _vertices.Find(v => v.CityName.Equals(waypointA));
+            var vertexB = _vertices.Find(v => v.CityName.Equals(waypointB));
+
+            int indexA = vertexA.Edges.FindIndex(e => e.Endpoint.Equals(vertexB));
+            vertexA.Edges.RemoveAt(indexA);
+
+            int indexB = vertexB.Edges.FindIndex(e => e.Endpoint.Equals(vertexA));
+            vertexB.Edges.RemoveAt(indexB);
+        }
+
         public string[] ListDestinations(string initial)
         {
             return _vertices.Select(v => v.CityName).Where(c => c != initial).ToArray();
@@ -112,12 +124,8 @@ namespace Internal_Server
         {
             private decimal _price;
             private Vertex _endpoint;
-            private bool _availability;
 
-            public Edge()
-            {
-                _availability = true;
-            }
+            public Edge() { }
 
             public Edge(Vertex endpoint, decimal price) : this()
             {
@@ -135,12 +143,6 @@ namespace Internal_Server
             {
                 get { return _endpoint; }
                 set { _endpoint = value; }
-            }
-
-            public bool Availability
-            {
-                get { return _availability; }
-                set { _availability = value; }
             }
         }
     }

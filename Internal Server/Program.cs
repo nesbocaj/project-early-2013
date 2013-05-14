@@ -71,6 +71,8 @@ namespace Internal_Server
                 "Sofia",
                 "Tallinn"
             );
+            _cities.ApplyDiscount("Tirana", "Sarajevo");
+            _cities.RemoveEdges("Tirana", "Sarajevo");
         }
 
         void ManageClient(Socket currentSocket)
