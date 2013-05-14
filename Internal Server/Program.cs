@@ -14,9 +14,11 @@ namespace Internal_Server
     class Program
     {
         private TcpConnection _connection;
+        private CityGraph _cities;
 
         private Program()
         {
+            GraphInit();
             _connection = TcpConnection.Instance;
 
             Console.WriteLine("Airline Server");
@@ -52,6 +54,23 @@ namespace Internal_Server
         static void Main(string[] args)
         {
             new Program();
+        }
+
+        public void GraphInit()
+        {
+            _cities = CityGraph.Instance;
+            _cities.InsertVertex(
+                "Tirana",
+                "Nicosia",
+                "Tórshavn",
+                "Douglas",
+                "Sarajevo",
+                "Skopje",
+                "Ljubljana",
+                "Podgorica",
+                "Sofia",
+                "Tallinn"
+            );
         }
 
         void ManageClient(Socket currentSocket)

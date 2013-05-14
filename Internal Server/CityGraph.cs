@@ -41,18 +41,27 @@ namespace Internal_Server
         public void InsertVertex(params string[] cityNames)
         {
             Array.ForEach(cityNames,
-                cityName => _vertices.Add(new Vertex(cityName)));
+                cityName => 
+                {
+                    var temp = new Vertex(cityName);
+                    AddEdges(temp);
+                    _vertices.Add(temp);
+                });
+
         }
 
-        public void AddEdge(string fromValue, string toValue)
+        private void AddEdges(Vertex vertex)
         {
-            Vertex from = _vertices.Find(v => v.CityName.Equals(fromValue));
-            Vertex to = _vertices.Find(v => v.CityName.Equals(toValue));
+            foreach (var temp in _vertices)
+            {
+                var price = (decimal)_randomizer.Next(300, 1000);
 
-            Edge edge = new Edge(to);
+                if (!vertex.Edges.Exists(e => e.Endpoint.Equals(temp)))
+                    vertex.Edges.Add(new Edge(temp, price));
 
-            if (!from.Edges.Any(e => e.Endpoint.Equals(to)))
-                from.Add(edge);
+                if (!temp.Edges.Exists(e => e.Endpoint.Equals(vertex)))
+                    temp.Edges.Add(new Edge(vertex, price));
+            }
         }
 
         public string[] ListDestinations(string initial)
@@ -93,14 +102,12 @@ namespace Internal_Server
             private decimal _price;
             private Vertex _endpoint;
 
-            public Edge()
-            {
-                _price = _randomizer.Next(300, 1000);
-            }
+            public Edge() { }
 
-            public Edge(Vertex endpoint) : this()
+            public Edge(Vertex endpoint, decimal price) : this()
             {
                 _endpoint = endpoint;
+                _price = price;
             }
 
             public decimal Price
