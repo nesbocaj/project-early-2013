@@ -32,6 +32,12 @@ namespace Internal_Server
                 return _instance;
             }
         }
+
+        public string[] Cities
+        {
+            get { return _vertices.Select(v => v.CityName).ToArray(); }
+        }
+
         public void InsertVertex(params string[] cityNames)
         {
             Array.ForEach(cityNames,
@@ -47,6 +53,11 @@ namespace Internal_Server
 
             if (!from.Edges.Any(e => e.Endpoint.Equals(to)))
                 from.Add(edge);
+        }
+
+        public string[] ListDestinations(string initial)
+        {
+            return _vertices.Select(v => v.CityName).Where(c => c != initial).ToArray();
         }
 
         private class Vertex

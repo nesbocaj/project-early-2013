@@ -9,13 +9,14 @@ namespace TCP_Shared
     public class Response<T>
     {
         private T _value;
-        private string _message;
+        private string _code, _message;
 
         public Response() { }
 
-        public Response(T value, string message)
+        public Response(T value, string code, string message)
         {
             _value = value;
+            _code = code;
             _message = message;
         }
 
@@ -23,6 +24,12 @@ namespace TCP_Shared
         {
             get { return _value; }
             set { _value = value; }
+        }
+
+        public string Code
+        {
+            get { return _code; }
+            set { _code = value; }
         }
 
         public string Message

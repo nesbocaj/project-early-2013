@@ -23,6 +23,14 @@ namespace Internal_Server
             }
         }
 
+        /*
+         * help
+         * list cities
+         * list destinations
+         * search flights <initial city> <destination city>
+         * watch flight <waypoint cities, ...>
+         */
+
         public Response<T> Request<T>(string command)
         {
             Response<T> response = new Response<T>();

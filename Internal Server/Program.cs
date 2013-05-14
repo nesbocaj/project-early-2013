@@ -66,7 +66,8 @@ namespace Internal_Server
             {
                 response = _connection.Request<string>(reader.ReadString());
                 writer.Write(response.Value);
-                writer.Write(response.Message.Split('-')[1].Trim());
+                writer.Write(response.Code);
+                writer.Write(response.Message);
             }
             catch
             {
