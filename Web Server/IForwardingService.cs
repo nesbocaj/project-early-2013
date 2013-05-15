@@ -19,7 +19,7 @@ namespace Web_Server
 
         [OperationContract]
         [WebGet(UriTemplate = "/list/destinations/{initial}")]
-        string[] Destination(string initial);
+        string[] ListDestinations(string initial);
 
         [OperationContract]
         [WebGet(UriTemplate = "/search?From={initial}&To={destination}")]

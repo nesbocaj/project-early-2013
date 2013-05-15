@@ -21,19 +21,19 @@ namespace Web_Server
             return base.Channel.Cities();
         }
 
-        public string[] Destination(string initial)
+        public string[] ListDestinations(string initial)
         {
-            return base.Channel.Destination();
+            return base.Channel.ListDestinations(initial);
         }
 
         public string[] Search(string initial, string destination)
         {
-            return base.Channel.Search();
+            return null; //base.Channel.Search();
         }
 
         public string[] Watch(string initial, string destination)
         {
-            return base.Channel.Watch();
+            return null; // base.Channel.Watch();
         }
     }
 }
