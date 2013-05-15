@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Forms_Client
 {
-    interface IMainWindow
+    public interface IMainWindow
     {
+
     }
 }

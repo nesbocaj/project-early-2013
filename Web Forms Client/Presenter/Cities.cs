@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Forms_Client
+namespace Web_Forms_Client.Presenter
 {
-    public interface IOverwiewForm
+    class Cities:List<string>
     {
-
     }
 }

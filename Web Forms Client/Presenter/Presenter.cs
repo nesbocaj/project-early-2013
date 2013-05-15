@@ -4,29 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-namespace Forms_Client.Presenter
+
+namespace Web_Forms_Client.Presenter
 {
     class Presenter
     {
         private static Presenter _instance = null;
 
-        private bool _okButtonState = true;
+        private bool _okButtonState = true; 
 
-        private Presenter() { }
+        private Presenter()
+        {
+        }
 
-        public static Presenter GetInstance()
+        public static Presenter Getinstance()
         {
             if (_instance == null)
             {
                 _instance = new Presenter();
-                _instance.Overview = new View.Overview_Form();
+                _instance.Overview = new View.Overview();
             }
-
             return _instance;
         }
 
-        public View.Overview_Form Overview { get; set; }
-        public View.MainWindow Main { get; set; }
+        public View.Overview Overview {get; set;}
+        public Web_Forms_Client.MainWindow Main{ get; set; }
 
         public void CallOverview()
         {
