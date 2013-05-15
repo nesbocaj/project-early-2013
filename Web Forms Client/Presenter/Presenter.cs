@@ -34,7 +34,7 @@ namespace Web_Forms_Client.Presenter
         {
             var arr = Main.ChosenCities();
             if (arr[0] == "" || arr[1] == "")
-                MessageBox.Show("Du mangler at udfylde felterne", "FEJL!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Begge felter skal udfyldes.", "ERROR 43021", MessageBoxButtons.OK, MessageBoxIcon.Error);
             //else
                 Overview.Show();
         }
