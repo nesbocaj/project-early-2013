@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace TCP_Shared
 {
+    [Serializable]
     public class Response<T>
     {
         private T _value;
@@ -66,7 +67,7 @@ namespace TCP_Shared
             {
                 _formatter.Serialize(stream, this);
                 stream.Position = 0;
-                string value = Convert.ToBase64String(stream.ToArray());
+                serialized = Convert.ToBase64String(stream.ToArray());
             }
 
             return serialized;

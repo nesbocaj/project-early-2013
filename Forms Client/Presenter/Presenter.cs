@@ -12,7 +12,11 @@ namespace Forms_Client.Presenter
 
         private bool _okButtonState = true;
 
-        private Presenter() { }
+        private Presenter() 
+        {
+            var prox = new Proxy();
+            prox.Request("list destinations Ljubljana");
+        }
 
         public static Presenter GetInstance()
         {
