@@ -15,7 +15,10 @@ namespace Internal_Server
         private static TcpConnection _instance;
         private CityGraph _graph;
 
-        private TcpConnection() { }
+        private TcpConnection()
+        {
+            _graph = CityGraph.Instance;
+        }
 
         public static TcpConnection Instance
         {
