@@ -8,6 +8,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCP Shared", "TCP Shared\TCP Shared.csproj", "{911DD4CC-603D-45A5-98FA-699A186BDCF3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web Forms Client", "Web Forms Client\Web Forms Client.csproj", "{9069E993-B73E-4DC9-A7F9-1992A9605E3E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web Server", "Web Server\Web Server.csproj", "{B0973147-273F-4620-B090-026AD503CA98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +32,10 @@ Global
 		{9069E993-B73E-4DC9-A7F9-1992A9605E3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9069E993-B73E-4DC9-A7F9-1992A9605E3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9069E993-B73E-4DC9-A7F9-1992A9605E3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0973147-273F-4620-B090-026AD503CA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0973147-273F-4620-B090-026AD503CA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0973147-273F-4620-B090-026AD503CA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0973147-273F-4620-B090-026AD503CA98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

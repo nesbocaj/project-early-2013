@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Web_Server.ForwardingService" CodeBehind="ForwardingService.svc.cs" %>
