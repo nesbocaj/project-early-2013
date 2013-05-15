@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,7 +39,7 @@ namespace Internal_Server
                     Console.WriteLine("200 OK - Connection accepted from {0}",
                         remote);
 
-                    var clientThread = new Thread(() => ManageClient(current));
+                    var clientThread = new Thread(() => _connection.ManageClient(current));
                     clientThread.Start();
                 }
                 catch (SocketException se)
@@ -47,6 +49,7 @@ namespace Internal_Server
                     else
                         Console.WriteLine("410 GONE - Connection with {0} was interrupted",
                             remote);
+                    Debug.WriteLine(se.Message);
                 }
             }
         }
@@ -73,31 +76,6 @@ namespace Internal_Server
             );
             _cities.ApplyDiscount("Tirana", "Sarajevo");
             _cities.RemoveEdges("Tirana", "Sarajevo");
-        }
-
-        void ManageClient(Socket currentSocket)
-        {
-            NetworkStream stream = new NetworkStream(currentSocket);
-            BinaryWriter writer = new BinaryWriter(stream);
-            BinaryReader reader = new BinaryReader(stream);
-
-            Response<string> response = null;
-
-            try
-            {
-                response = _connection.Request<string>(reader.ReadString());
-                writer.Write(response.Value);
-                writer.Write(response.Code);
-                writer.Write(response.Message);
-            }
-            catch
-            {
-                Console.WriteLine("400 - BAD REQUEST");
-            }
-
-            Console.WriteLine(response.Message);
-
-            stream.Close();
         }
     }
 }

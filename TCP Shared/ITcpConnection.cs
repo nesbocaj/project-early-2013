@@ -8,6 +8,6 @@ namespace TCP_Shared
 {
     public interface ITcpConnection
     {
-        Response<T> Request<T>(string command);
+        string Request(string command);
     }
 }
