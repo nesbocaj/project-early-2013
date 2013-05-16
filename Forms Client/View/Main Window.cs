@@ -19,11 +19,18 @@ namespace Forms_Client.View
             InitializeComponent();
             _presenter = Presenter.Presenter.GetInstance();
             _presenter.Main = this;
+            _presenter.PopulateLists();
         }
 
         private void OKButton_Click(object sender, EventArgs e)
         {
             _presenter.CallOverview();
+        }
+
+
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         public string[] ChosenCities()
@@ -43,9 +50,10 @@ namespace Forms_Client.View
             return arr;
         }
 
-        private void CancelButton_Click(object sender, EventArgs e)
+        public void PopulateBoxes(string[] items)
         {
-            this.Close();
+            FromBox.Items.AddRange(items);
+            ToBox.Items.AddRange(items);
         }
     }
 }

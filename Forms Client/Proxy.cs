@@ -13,8 +13,16 @@ namespace Forms_Client
 {
     class Proxy : ITcpConnection
     {
+        private List<String> _cityList = null;
+
+        public Proxy()
+        {
+            _cityList = new List<string>();
+        }
+
         public string Request(string command)
         {
+            string txt = "";
             using (var tcp = new TcpClient())
             {
                 tcp.Connect(IPAddress.Parse("127.0.0.1"), 7000);
@@ -25,19 +33,11 @@ namespace Forms_Client
                     var binReader = new BinaryReader(stream);
                     var binWriter = new BinaryWriter(stream);
 
-                    for (int i = 0; i < 10; i += 1)
-                    {
-                        binWriter.Write(command);
-                        var txt = binReader.ReadString();
-                        var response = Response<String[]>.FromSerialized(txt);
-
-                        foreach (var r in response.Value)
-                            Debug.WriteLine(r);
-                    }
+                    binWriter.Write(command);
+                    txt = binReader.ReadString();
                 }
             }
-            
-            return "";
+            return txt;
         }
     }
 }

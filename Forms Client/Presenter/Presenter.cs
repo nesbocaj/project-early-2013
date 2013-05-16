@@ -4,18 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 namespace Forms_Client.Presenter
 {
     class Presenter
     {
         private static Presenter _instance = null;
-
         private bool _okButtonState = true;
+        private Proxy _prox = null;
+        private string _resultString = null;
 
         private Presenter() 
         {
-            var prox = new Proxy();
-            prox.Request("list destinations Ljubljana");
+            _prox = new Proxy();
+            //Thread t = new Thread(x => 
+           // {
+                _resultString = _prox.Request("list destinations Ljubljana");
+            //});
+            //_prox.Request("list destinations Ljubljana");
+            
         }
 
         public static Presenter GetInstance()
@@ -53,6 +60,15 @@ namespace Forms_Client.Presenter
                 Overview.Close();
                 Overview.SetCancelButtonVisibility(true);
                 _okButtonState = true;
+            }
+        }
+
+        public void PopulateLists()
+        {
+            if (_resultString != null)
+            {
+                var response = TCP_Shared.Response<String[]>.FromSerialized(_resultString);
+                Main.PopulateBoxes(response.Value);
             }
         }
     }
