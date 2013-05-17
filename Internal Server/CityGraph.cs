@@ -41,28 +41,50 @@ namespace Internal_Server
 
         public void InsertVertex(params string[] cityNames)
         {
+            Debug.WriteLine("CityGraph.InsertVertex");
+
             Array.ForEach(cityNames,
                 cityName => 
                 {
+                    Debug.WriteLine(" -> Inserting vertex: {0}",
+                        args: cityName);
+
                     var temp = new Vertex(cityName);
                     AddEdges(temp);
                     _vertices.Add(temp);
                 });
 
+            Debug.WriteLine("");
         }
 
         private void AddEdges(Vertex vertex)
         {
+            Debug.WriteLine("CityGraph.AddEdges");
+
             foreach (var temp in _vertices)
             {
                 decimal price = _randomizer.Next(300, 1000);
 
                 if (!vertex.Edges.Exists(e => e.Endpoint.Equals(temp)))
+                {
+                    Debug.WriteLine(" -> Adding edge from: {0} to: {1} with price: {2}",
+                        vertex.CityName,
+                        temp.CityName,
+                        price);
                     vertex.Edges.Add(new Edge(temp, price));
+                }
 
                 if (!temp.Edges.Exists(e => e.Endpoint.Equals(vertex)))
+                {
+                    Debug.WriteLine(" -> Adding edge from: {0} to: {1} with price: {2}",
+                        temp.CityName,
+                        vertex.CityName,
+                        price);
                     temp.Edges.Add(new Edge(vertex, price));
+                }
             }
+
+            Debug.WriteLine("");
         }
 
         public void RemoveEdges(string waypointA, string waypointB)
@@ -89,6 +111,7 @@ namespace Internal_Server
 
         public Tuple<string[], decimal> FindCheapestPath(string initial, string destination)
         {
+            Debug.WriteLine("CityGraph.FindCheapestPath");
             var resultingPath = new List<Vertex>();
             var priorityQueue = new List<Vertex>();
 
@@ -97,11 +120,18 @@ namespace Internal_Server
             initialVertex.Visited = true;
             initialVertex.PriceFromInitialVertex = 0;
 
+            Debug.WriteLine(" -> Enqueing: {0}"
+                + "\n    Price from initial vertex: {1}"
+                + "\n    Queue size: {2}",
+                initialVertex.CityName,
+                initialVertex.PriceFromInitialVertex,
+                priorityQueue.Count);
+
             priorityQueue.Add(initialVertex);
             var frontVertex = initialVertex;
             bool searching = true;
 
-            for (int counter = 0; priorityQueue.Count > 0 && searching; counter++)
+            while (priorityQueue.Count > 0 && searching)
             {
                 decimal value = 1000000000;
                 int i = 0;
@@ -115,18 +145,27 @@ namespace Internal_Server
                     }
 
                     i++;
-
                 }
 
                 frontVertex.Visited = true;
+
+                Debug.WriteLine(" <- Dequeing: {0} {{weight: {1}}}"
+                    + "\n    Queue size: {2}",
+                    frontVertex.CityName,
+                    frontVertex.PriceFromInitialVertex,
+                    priorityQueue.Count);
+
                 priorityQueue.Remove(frontVertex);
 
                 if (frontVertex.CityName.Equals(destination, StringComparison.InvariantCultureIgnoreCase))
                 {
                     var temp = frontVertex;
 
-                    while (!temp.CityName.Equals(initial, StringComparison.InvariantCultureIgnoreCase))
+                    while (temp != null)
                     {
+                        Debug.WriteLine(" -- Backtracing: {0}",
+                            args: temp.CityName);
+
                         resultingPath.Add(temp);
                         temp = temp.Previous;
                     }
@@ -140,61 +179,75 @@ namespace Internal_Server
                     var price = e.Price;
                     if (!e.Endpoint.Visited)
                     {
-                        var isFound = false;
+                        var found = false;
                         var priceIsLess = false;
 
                         foreach (var v in priorityQueue)
                         {
                             if (v.CityName.Equals(e.Endpoint.CityName, StringComparison.InvariantCultureIgnoreCase))
                             {
-                                isFound = true;
+                                found = true;
 
                                 if (frontVertex.PriceFromInitialVertex + price < v.PriceFromInitialVertex)
-                                {
                                     priceIsLess = true;
-                                }
                                 else
-                                {
                                     priceIsLess = false;
-                                    Debug.WriteLine("");
-                                }
                             }
                             else
-                                isFound = false;
+                                found = false;
                         }
 
-                        if (isFound && priceIsLess)
+                        if (found && priceIsLess)
                         {
                             var tmp = e.Endpoint;
+
+                            Debug.WriteLine(" -- Overwriting: {0}"
+                                + "\n    Price from initial vertex: {1}",
+                                e.Endpoint.CityName,
+                                e.Endpoint.PriceFromInitialVertex);
+
                             tmp.PriceFromInitialVertex = frontVertex.PriceFromInitialVertex + price;
                             tmp.Previous = frontVertex;
                         }
-                        else if (isFound && !priceIsLess)
-                        {
-                            
-                        }
-                        else if (!isFound && !priceIsLess)
+                        else if (!found)
                         {
                             e.Endpoint.PriceFromInitialVertex = frontVertex.PriceFromInitialVertex + price;
                             e.Endpoint.Previous = frontVertex;
+
+                            Debug.WriteLine(" -> Enqueing: {0}"
+                                + "\n    Previous vertex: {1}"
+                                + "\n    Price from initial vertex: {2}"
+                                + "\n    Queue size: {3}",
+                                e.Endpoint.CityName,
+                                e.Endpoint.Previous.CityName,
+                                e.Endpoint.PriceFromInitialVertex,
+                                priorityQueue.Count);
+
                             priorityQueue.Add(e.Endpoint);
                         }
                     }
-                    else
-                    {
-                        // debug message
-                    }
                 }
-
-                Debug.WriteLine(counter);
             }
 
-            var waypoints = resultingPath.Select(v => v.CityName).ToArray();
+            string[] waypoints = null;
+
+            if (resultingPath.Count > 0)
+            {
+                waypoints = resultingPath.Select(v => v.CityName).Reverse().ToArray();
+                Debug.WriteLine(" -- Resulting path of cost {0}:\n    {1}\n",
+                    frontVertex.PriceFromInitialVertex,
+                    string.Join("\n    ", waypoints));
+            }
+            else
+                Debug.WriteLine(" !! No path found\n");
+
             return new Tuple<string[], decimal>(waypoints, frontVertex.PriceFromInitialVertex);
         }
 
         public void ApplyDiscount(string waypointA, string waypointB)
         {
+            Debug.WriteLine("CityGraph.ApplyDiscount");
+
             decimal price = _randomizer.Next(100, 200);
 
             var vertexA = _vertices
@@ -202,8 +255,21 @@ namespace Internal_Server
             var vertexB = _vertices
                 .Find(v => v.CityName.Equals(waypointB, StringComparison.InvariantCultureIgnoreCase));
 
+            Debug.WriteLine(" -- Overwriting edge between: {0} and: {1}"
+                + "New Price: {2}",
+                vertexA.CityName,
+                vertexB.CityName,
+                price);
             vertexA.Edges.Single(e => e.Endpoint.Equals(vertexB)).Price = price;
+
+            Debug.WriteLine(" -- Overwriting edge between: {0} and: {1}"
+                + "New Price: {2}",
+                vertexB.CityName,
+                vertexA.CityName,
+                price);
             vertexB.Edges.Single(e => e.Endpoint.Equals(vertexA)).Price = price;
+
+            Debug.WriteLine("");
         }
 
         private class Vertex
