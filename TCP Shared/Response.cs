@@ -14,16 +14,22 @@ namespace TCP_Shared
     {
         private T _value;
         private string _code, _message;
+        private bool _succeeded;
         private static BinaryFormatter _formatter;
 
         public Response() { }
 
-        public Response(T value, string code, string message)
+        public Response(string code, string message, bool succeeded)
         {
-            
-            _value = value;
             _code = code;
             _message = message;
+            _succeeded = succeeded;
+        }
+
+        public Response(T value, string code, string message, bool succeeded = true)
+            : this(code, message, succeeded)
+        {
+            _value = value;
         }
 
         public static Response<T> FromSerialized(string serialized)
@@ -42,6 +48,12 @@ namespace TCP_Shared
         {
             get { return _value; }
             set { _value = value; }
+        }
+
+        public bool Succeeded
+        {
+            get { return _succeeded; }
+            set { _succeeded = value; }
         }
 
         public string Code

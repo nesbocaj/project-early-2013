@@ -66,8 +66,10 @@ namespace Internal_Server
 
         public void RemoveEdges(string waypointA, string waypointB)
         {
-            var vertexA = _vertices.Find(v => v.CityName.Equals(waypointA));
-            var vertexB = _vertices.Find(v => v.CityName.Equals(waypointB));
+            var vertexA = _vertices
+                .Find(v => v.CityName.Equals(waypointA, StringComparison.InvariantCultureIgnoreCase));
+            var vertexB = _vertices
+                .Find(v => v.CityName.Equals(waypointB, StringComparison.InvariantCultureIgnoreCase));
 
             int indexA = vertexA.Edges.FindIndex(e => e.Endpoint.Equals(vertexB));
             vertexA.Edges.RemoveAt(indexA);
@@ -78,15 +80,20 @@ namespace Internal_Server
 
         public string[] ListDestinations(string initial)
         {
-            return _vertices.Select(v => v.CityName).Where(c => c != initial).ToArray();
+            return _vertices
+                .Select(v => v.CityName)
+                .Where(s => !s.Equals(initial, StringComparison.InvariantCultureIgnoreCase))
+                .ToArray();
         }
 
         public void ApplyDiscount(string waypointA, string waypointB)
         {
             decimal price = _randomizer.Next(100, 200);
 
-            var vertexA = _vertices.Find(v => v.CityName.Equals(waypointA));
-            var vertexB = _vertices.Find(v => v.CityName.Equals(waypointB));
+            var vertexA = _vertices
+                .Find(v => v.CityName.Equals(waypointA, StringComparison.InvariantCultureIgnoreCase));
+            var vertexB = _vertices
+                .Find(v => v.CityName.Equals(waypointB, StringComparison.InvariantCultureIgnoreCase));
 
             vertexA.Edges.Single(e => e.Endpoint.Equals(vertexB)).Price = price;
             vertexB.Edges.Single(e => e.Endpoint.Equals(vertexA)).Price = price;

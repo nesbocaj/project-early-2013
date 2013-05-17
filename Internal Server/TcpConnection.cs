@@ -60,15 +60,16 @@ namespace Internal_Server
 
         public string Request(string command)
         {
-            string response = default(string);
+            string serialized = default(string);
             var parsed = ParseCommand(command);
             var commandIdentifier = parsed[0];
             parsed.RemoveAt(0);
 
-            switch(commandIdentifier)
+            switch (commandIdentifier)
             {
                 case "help":
                 {
+                    ShowHelp();
                     break;
                 }
                 case "list":
@@ -76,51 +77,84 @@ namespace Internal_Server
                     try
                     {
                         if (parsed[0].ToLower() == "cities")
-                            response = ListCities().Serialize();
+                        {
+                            var response = ListCities();
+                            Console.WriteLine(response);
+                            serialized = response.Serialize();
+                        }
                         else if (parsed[0].ToLower() == "destinations")
-                            response = ListDestinations(parsed[1]).Serialize();
+                        {
+                            var response = ListDestinations(parsed[1]);
+                            Console.WriteLine(response);
+                            serialized = response.Serialize();
+                        }
                     }
 
                     catch (NullReferenceException nre)
                     {
-                        // INVALID COMMAND
                         Debug.WriteLine(nre.Message);
+                        var response = new Response<string[]>(
+                            "400 BAD REQUEST",
+                            string.Format("Could not {0}", command),
+                            false);
+                        Console.WriteLine(response);
+                        serialized = response.Serialize();
                     }
 
                     break;
                 }
+                case "search":
+                {
+                    break;
+                }
+                case "watch":
+                {
+                    break;
+                }
                 default:
                 {
-                    // 502 NOT IMPLEMENTED
+                    var response = new Response<object>(
+                            "502 COMMAND NOT IMPLEMENTED",
+                            string.Format("Could not {0}", command),
+                            false);
+                    Console.WriteLine(response);
+                    serialized = response.Serialize();
+
                     break;
                 }
             }
 
-            return response;
+            return serialized;
         }
 
         private Response<string[]> ShowHelp()
         {
             return new Response<string[]>(
-                _graph.Cities,
-                "",
-                "");
+                new [] {
+                    "help",
+                    "list cities",
+                    "list destinations <initial city>",
+                    "search flights <initial city> <destination city>",
+                    "watch flight <waypoint cities, ...>"
+                },
+                "200 OK",
+                "The following commands are available");
         }
 
         private Response<string[]> ListCities()
         {
             return new Response<string[]>(
                 _graph.Cities,
-                "",
-                "");
+                "200 OK",
+                "The possible cities are the following");
         }
 
-        private Response<string[]> ListDestinations(string initial)
+        private Response<IEnumerable<string>> ListDestinations(string initial)
         {
-            return new Response<string[]>(
+            return new Response<IEnumerable<string>>(
                 _graph.ListDestinations(initial),
-                "",
-                "");
+                "200 OK",
+                String.Format("{0} is connected to the following destinations", initial));
         }
 
         private Response<Tuple<string[], decimal>> SearchFlights(string[] arguments)
