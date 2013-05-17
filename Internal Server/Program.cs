@@ -16,7 +16,7 @@ namespace Internal_Server
     class Program
     {
         private TcpConnection _connection;
-        private CityGraph _cities;
+        private CityGraph _graph;
 
         private Program()
         {
@@ -61,8 +61,8 @@ namespace Internal_Server
 
         public void GraphInit()
         {
-            _cities = CityGraph.Instance;
-            _cities.InsertVertex(
+            _graph = CityGraph.Instance;
+            _graph.InsertVertex(
                 "Tirana",
                 "Nicosia",
                 "Tórshavn",
@@ -74,8 +74,9 @@ namespace Internal_Server
                 "Sofia",
                 "Tallinn"
             );
-            _cities.ApplyDiscount("Tirana", "Sarajevo");
-            _cities.RemoveEdges("Tirana", "Sarajevo");
+            _graph.ApplyDiscount("Tirana", "Sarajevo");
+            _graph.RemoveEdges("Tirana", "Sarajevo");
+            var result = _graph.FindCheapestPath("Tirana", "Nicosia");
         }
     }
 }
