@@ -149,9 +149,9 @@ namespace Internal_Server
                 "The possible cities are the following");
         }
 
-        private Response<IEnumerable<string>> ListDestinations(string initial)
+        private Response<string[]> ListDestinations(string initial)
         {
-            return new Response<IEnumerable<string>>(
+            return new Response<string[]>(
                 _graph.ListDestinations(initial),
                 "200 OK",
                 String.Format("{0} is connected to the following destinations", initial));
