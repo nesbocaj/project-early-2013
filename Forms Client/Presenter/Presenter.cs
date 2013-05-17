@@ -14,15 +14,18 @@ namespace Forms_Client.Presenter
         private Proxy _prox = null;
         private string _resultString = null;
 
-        private Presenter() 
+        private string[] _response = null;
+        private string[] _filteredArray = null;
+
+        private Presenter()
         {
             _prox = new Proxy();
             //Thread t = new Thread(x => 
-           // {
-                _resultString = _prox.Request("list destinations Ljubljana");
+            // {
+            _resultString = _prox.Request("list destinations Ljubljana");
             //});
             //_prox.Request("list destinations Ljubljana");
-            
+
         }
 
         public static Presenter GetInstance()
@@ -67,9 +70,16 @@ namespace Forms_Client.Presenter
         {
             if (_resultString != null)
             {
-                var response = TCP_Shared.Response<String[]>.FromSerialized(_resultString);
-                Main.PopulateBoxes(response.Value);
+                var responseString = TCP_Shared.Response<String[]>.FromSerialized(_resultString);
+                _response = responseString.Value;
+                Main.PopulateFromBox(_response);
             }
+        }
+
+        public void ToBoxText()
+        {
+            _filteredArray = _response.Where(x => x != Main.FromBoxText).ToArray();
+            Main.PopulateToBox(_filteredArray);
         }
     }
 }

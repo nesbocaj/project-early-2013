@@ -50,10 +50,25 @@ namespace Forms_Client.View
             return arr;
         }
 
-        public void PopulateBoxes(string[] items)
+        public void PopulateFromBox(string[] items)
         {
+            ToBox.Items.Clear();
             FromBox.Items.AddRange(items);
+        }
+        public void PopulateToBox(string[] items)
+        {
+            ToBox.Items.Clear(); // makes sure the list is cleared before adding items, this is to avoid duplicates
             ToBox.Items.AddRange(items);
+        }
+
+        public String FromBoxText
+        {
+            get { return FromBox.Text; }
+        }
+
+        private void FromBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _presenter.ToBoxText();
         }
     }
 }
