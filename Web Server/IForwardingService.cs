@@ -14,19 +14,26 @@ namespace Web_Server
     {
 
         [OperationContract]
-        [WebGet(UriTemplate = "/list/cities")]
-        string[] Cities();
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/list/cities")]
+        JsonMessage ListCities();
 
         [OperationContract]
-        [WebGet(UriTemplate = "/list/destinations/{initial}")]
-        string[] ListDestinations(string initial);
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/list/destinations/{initial}")]
+        JsonMessage ListDestinations(string initial);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/search?From={initial}&To={destination}")]
-        string[] Search(string initial, string destination);
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/search?From={initial}&To={destination}")]
+        JsonMessage ListSearch(string initial, string destination);
 
         [OperationContract]
-        [WebGet(UriTemplate = "/watch?From={initial}&To={destination}")]
-        string[] Watch(string initial, string destination);
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/watch?From={initial}&To={destination}")]
+        JsonMessage ListWatch(string initial, string destination);                 
+    }
+
+    [DataContract]
+    public class JsonMessage
+    {
+        [DataMember]
+        public string Message { get; set; }
     }
 }
