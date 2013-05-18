@@ -20,12 +20,7 @@ namespace Forms_Client.Presenter
         private Presenter()
         {
             _prox = new Proxy();
-            //Thread t = new Thread(x => 
-            // {
             _resultString = _prox.Request("list cities");
-            //});
-            //_prox.Request("list destinations Ljubljana");
-
         }
 
         public static Presenter GetInstance()
