@@ -77,6 +77,7 @@ namespace Internal_Server
             _graph.ApplyDiscount("Tirana", "Sarajevo");
             _graph.RemoveEdges("Tirana", "Sarajevo");
             var result = _graph.FindCheapestPath("Tirana", "Nicosia");
+            var result2 = _graph.FindCheapestPath("Tirana", "Sofia");
         }
     }
 }

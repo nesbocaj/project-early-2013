@@ -105,6 +105,7 @@ namespace Internal_Server
                 }
                 case "search":
                 {
+                    serialized = SearchFlights(parsed[2], parsed[3]).Serialize();
                     break;
                 }
                 case "watch":
@@ -157,9 +158,20 @@ namespace Internal_Server
                 String.Format("{0} is connected to the following destinations", initial));
         }
 
-        private Response<Tuple<string[], decimal>> SearchFlights(string[] arguments)
+        private Response<Tuple<string[], decimal>> SearchFlights(string initial, string destination)
         {
-            return new Response<Tuple<string[], decimal>>();
+            var result = _graph.FindCheapestPath(initial, destination);
+
+            if (result != null)
+                return new Response<Tuple<string[], decimal>>(
+                    result,
+                    "200 OK",
+                    String.Format("Your flights from {0} to {1} is as follows", initial, destination));
+            else
+                return new Response<Tuple<string[], decimal>>(
+                    "400 BAD REQUEST",
+                    String.Format("Could not find a path between {0} and {1}", initial, destination),
+                    false);
         }
 
         private void WatchFlight(string[] arguments)

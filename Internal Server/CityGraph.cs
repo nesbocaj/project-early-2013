@@ -220,6 +220,10 @@ namespace Internal_Server
 					}
 				}
 			}
+			else
+				Debug.WriteLine(" -- Reusing previous calculation");
+
+			lastInitial = initial;
 
 			var temp = FindVertex(destination);
 			var totalPrice = temp.PriceFromInitialVertex;
