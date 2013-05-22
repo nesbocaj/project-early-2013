@@ -105,7 +105,7 @@ namespace Internal_Server
                 }
                 case "search":
                 {
-                    serialized = SearchFlights(parsed[2], parsed[3]).Serialize();
+                    serialized = SearchFlights(parsed[1], parsed[2]).Serialize();
                     break;
                 }
                 case "watch":
