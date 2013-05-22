@@ -13,9 +13,13 @@ namespace Forms_Client.Presenter
         private bool _okButtonState = true;
         private Proxy _prox = null;
         private string _resultString = null;
+        private string _flight = null;
+
 
         private string[] _response = null;
         private string[] _filteredArray = null;
+
+
 
         private Presenter()
         {
@@ -43,7 +47,11 @@ namespace Forms_Client.Presenter
             if (arr[0] == "" || arr[1] == "")
                 MessageBox.Show("Du mangler at udfylde felterne", "FEJL!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
+            {
+                var request = String.Format("search flights {0} {1}", Main.FromBoxText, Main.ToBoxText);
+                _flight = _prox.Request(request);
                 Overview.Show();
+            }
         }
 
         public void ChangeOverview()
@@ -59,6 +67,19 @@ namespace Forms_Client.Presenter
                 Overview.SetCancelButtonVisibility(true);
                 _okButtonState = true;
             }
+        }
+
+        public void PopulateOverview()
+        {
+            var response = TCP_Shared.Response<Tuple<String[], Decimal>>.FromSerialized(_flight);
+            
+            var item1 = response.Value.Item1;
+
+            var price = response.Value.Item2;
+            var description = String.Format("Din rejse:\n{0}", String.Join("\n", item1));
+
+            Overview.DescriptopnLabelText(description);
+            Overview.PriceLabelText(price);
         }
 
         public void PopulateLists()

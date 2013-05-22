@@ -66,6 +66,11 @@ namespace Forms_Client.View
             get { return FromBox.Text; }
         }
 
+        public String ToBoxText
+        {
+            get { return ToBox.Text; }
+        }
+
         private void FromBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             _presenter.ToBoxText();

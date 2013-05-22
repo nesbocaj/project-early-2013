@@ -39,5 +39,14 @@ namespace Forms_Client.View
         {
             _presenter.Overview = new Overview_Form();
         }
+
+        public void DescriptopnLabelText(string text)
+        {
+            DescriptionLabel.Text = text;
+        }
+        public void PriceLabelText(decimal price)
+        {
+            PriceLabel.Text = price.ToString();
+        }
     }
 }
