@@ -18,7 +18,7 @@ namespace Internal_Server
 		private static CityGraph _instance;
 		private List<Vertex> _vertices;
 		private static Random _randomizer = new Random();
-        private string lastDestination;
+		private string lastInitial;
 
 		private CityGraph()
 		{
@@ -112,114 +112,114 @@ namespace Internal_Server
 
 		public Tuple<string[], decimal> FindCheapestPath(string initial, string destination)
 		{
-            var resultingPath = new List<Vertex>();
+			var resultingPath = new List<Vertex>();
 
-            if (destination != lastDestination)
-            {
-                Debug.WriteLine("CityGraph.FindCheapestPath");
+			if (initial != lastInitial)
+			{
+				Debug.WriteLine("CityGraph.FindCheapestPath");
 
-                var priorityQueue = new List<Vertex>();
+				var priorityQueue = new List<Vertex>();
 
-                Debug.WriteLine(" -- Running cleanup");
+				Debug.WriteLine(" -- Running cleanup");
 
-                foreach (var vertex in _vertices)
-                {
-                    vertex.Previous = null;
-                    vertex.PriceFromInitialVertex = 0;
-                    vertex.Visited = false;
-                }
+				foreach (var vertex in _vertices)
+				{
+					vertex.Previous = null;
+					vertex.PriceFromInitialVertex = 0;
+					vertex.Visited = false;
+				}
 
-                var initialVertex = FindVertex(initial);
+				var initialVertex = FindVertex(initial);
 
-                Debug.WriteLine(" -> Enqueing: {0}"
-                    + "\n    Price from initial vertex: {1}"
-                    + "\n    Queue size: {2}",
-                    initialVertex.CityName,
-                    initialVertex.PriceFromInitialVertex,
-                    priorityQueue.Count);
+				Debug.WriteLine(" -> Enqueing: {0}"
+					+ "\n    Price from initial vertex: {1}"
+					+ "\n    Queue size: {2}",
+					initialVertex.CityName,
+					initialVertex.PriceFromInitialVertex,
+					priorityQueue.Count);
 
-                priorityQueue.Add(initialVertex);
-                var frontVertex = initialVertex;
-                var verticesVisited = 0;
+				priorityQueue.Add(initialVertex);
+				var frontVertex = initialVertex;
+				var verticesVisited = 0;
 
-                while (priorityQueue.Count > 0 && verticesVisited < _vertices.Count)
-                {
-                    decimal value = decimal.MaxValue;
+				while (priorityQueue.Count > 0 && verticesVisited < _vertices.Count)
+				{
+					decimal value = decimal.MaxValue;
 
-                    foreach (var v in priorityQueue)
-                    {
-                        if (v.PriceFromInitialVertex < value)
-                        {
-                            frontVertex = v;
-                            value = v.PriceFromInitialVertex;
-                        }
-                    }
+					foreach (var v in priorityQueue)
+					{
+						if (v.PriceFromInitialVertex < value)
+						{
+							frontVertex = v;
+							value = v.PriceFromInitialVertex;
+						}
+					}
 
-                    frontVertex.Visited = true;
-                    verticesVisited++;
+					frontVertex.Visited = true;
+					verticesVisited++;
 
-                    Debug.WriteLine(" <- Dequeing: {0} {{weight: {1}}}"
-                        + "\n    Queue size: {2}",
-                        frontVertex.CityName,
-                        frontVertex.PriceFromInitialVertex,
-                        priorityQueue.Count);
+					Debug.WriteLine(" <- Dequeing: {0} {{weight: {1}}}"
+						+ "\n    Queue size: {2}",
+						frontVertex.CityName,
+						frontVertex.PriceFromInitialVertex,
+						priorityQueue.Count);
 
-                    priorityQueue.Remove(frontVertex);
+					priorityQueue.Remove(frontVertex);
 
-                    foreach (var e in frontVertex.Edges)
-                    {
-                        var price = e.Price;
+					foreach (var e in frontVertex.Edges)
+					{
+						var price = e.Price;
 
-                        if (!e.Endpoint.Visited)
-                        {
-                            var found = false;
-                            var priceIsLess = false;
+						if (!e.Endpoint.Visited)
+						{
+							var found = false;
+							var priceIsLess = false;
 
-                            foreach (var v in priorityQueue)
-                            {
-                                if (v.CityName.Equals(e.Endpoint.CityName, StringComparison.InvariantCultureIgnoreCase))
-                                {
-                                    found = true;
+							foreach (var v in priorityQueue)
+							{
+								if (v.CityName.Equals(e.Endpoint.CityName, StringComparison.InvariantCultureIgnoreCase))
+								{
+									found = true;
 
-                                    if (frontVertex.PriceFromInitialVertex + price < v.PriceFromInitialVertex)
-                                        priceIsLess = true;
-                                    else
-                                        priceIsLess = false;
-                                }
-                            }
+									if (frontVertex.PriceFromInitialVertex + price < v.PriceFromInitialVertex)
+										priceIsLess = true;
+									else
+										priceIsLess = false;
+								}
+							}
 
-                            if (found && priceIsLess)
-                            {
-                                var tmp = e.Endpoint;
+							if (found && priceIsLess)
+							{
+								var tmp = e.Endpoint;
 
-                                Debug.WriteLine(" -- Overwriting: {0}"
-                                    + "\n    Price from initial vertex: {1}",
-                                    e.Endpoint.CityName,
-                                    e.Endpoint.PriceFromInitialVertex);
+								Debug.WriteLine(" -- Overwriting: {0}"
+									+ "\n    Price from initial vertex: {1}",
+									e.Endpoint.CityName,
+									e.Endpoint.PriceFromInitialVertex);
 
-                                tmp.PriceFromInitialVertex = frontVertex.PriceFromInitialVertex + price;
-                                tmp.Previous = frontVertex;
-                            }
-                            else if (!found)
-                            {
-                                e.Endpoint.PriceFromInitialVertex = frontVertex.PriceFromInitialVertex + price;
-                                e.Endpoint.Previous = frontVertex;
+								tmp.PriceFromInitialVertex = frontVertex.PriceFromInitialVertex + price;
+								tmp.Previous = frontVertex;
+							}
+							else if (!found)
+							{
+								e.Endpoint.PriceFromInitialVertex = frontVertex.PriceFromInitialVertex + price;
+								e.Endpoint.Previous = frontVertex;
 
-                                Debug.WriteLine(" -> Enqueing: {0}"
-                                    + "\n    Previous vertex: {1}"
-                                    + "\n    Price from initial vertex: {2}"
-                                    + "\n    Queue size: {3}",
-                                    e.Endpoint.CityName,
-                                    e.Endpoint.Previous.CityName,
-                                    e.Endpoint.PriceFromInitialVertex,
-                                    priorityQueue.Count);
+								Debug.WriteLine(" -> Enqueing: {0}"
+									+ "\n    Previous vertex: {1}"
+									+ "\n    Price from initial vertex: {2}"
+									+ "\n    Queue size: {3}",
+									e.Endpoint.CityName,
+									e.Endpoint.Previous.CityName,
+									e.Endpoint.PriceFromInitialVertex,
+									priorityQueue.Count);
 
-                                priorityQueue.Add(e.Endpoint);
-                            }
-                        }
-                    }
-                }
-            }
+								priorityQueue.Add(e.Endpoint);
+							}
+						}
+					}
+				}
+			}
 
 			var temp = FindVertex(destination);
 			var totalPrice = temp.PriceFromInitialVertex;
