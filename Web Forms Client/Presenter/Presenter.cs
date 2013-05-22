@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
+using System.Web.Script.Serialization;
+using System.Runtime.Serialization.Json;
 
 namespace Web_Forms_Client.Presenter
 {
@@ -61,27 +63,34 @@ namespace Web_Forms_Client.Presenter
             }
         }
 
-        public string[] GetCityList()
+        public void GetCityList()
         {
             _webClient.DownloadStringCompleted += client_GetCityListCompleted;
 
             _webClient.DownloadStringAsync(
-                new Uri(string.Format("{0}/list/cities",
+                new Uri(string.Format("{0}/list/Test",
                 _baseUrl)));
-            return null;
         }
 
-        public void client_GetCityListCompleted(object sender, DownloadStringCompletedEventArgs e)
+        private void client_GetCityListCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             if (e.Error == null)
             {
-                XDocument xmlResponse = XDocument.Parse(e.Result);
+                DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(JsonMessage));
+                JsonMessage message = (JsonMessage)Serializer.ReadObject(new MemoryStream(Encoding.Unicode.GetBytes(e.Result)));
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                string[] Cities = js.Deserialize<string[]>(message.Message);
 
-                string test = xmlResponse.Root.Value;
+                //string test = xmlResponse.Root.Value;
 
             }
 
             _webClient.DownloadStringCompleted -= client_GetCityListCompleted;
+        }
+
+        public class JsonMessage
+        {
+            public string Message;
         }
     }
 }

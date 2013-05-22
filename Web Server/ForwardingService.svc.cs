@@ -12,63 +12,59 @@ namespace Web_Server
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "ForwardingService" in code, svc and config file together.
     // NOTE: In order to launch WCF Test Client for testing this service, please select ForwardingService.svc or ForwardingService.svc.cs at the Solution Explorer and start debugging.
-    public class ForwardingService : 
-        ClientBase<Internal_Server.ISOAPService>, 
-        Internal_Server.ISOAPService, 
-        IForwardingService
+    public class ForwardingService : IForwardingService
     {
-        public JsonMessage ListCities()
-        {                           
+        private SOAPConsumer client;
+
+        public ForwardingService()
+        {
+            client = new SOAPConsumer();
+        }
+
+        public JsonMessage TestMethod()
+        {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             JsonMessage cityList = new JsonMessage();
-            cityList.Message = serializer.Serialize(base.Channel.Cities());
+            cityList.Message = "[{index:'0',name:'Copenhagen'},{index:'1',name:'Beijing'}]";
 
             return cityList;
         }
 
-        public JsonMessage ListDestinations(string initial)
+
+        public JsonMessage Cities()
+        {                           
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            JsonMessage cityList = new JsonMessage();
+            cityList.Message = serializer.Serialize(client.Cities());
+
+            return cityList;
+        }
+
+        public JsonMessage Destinations(string from)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             JsonMessage destinationList = new JsonMessage();
-            destinationList.Message = serializer.Serialize(base.Channel.Destinations(initial));
+            destinationList.Message = serializer.Serialize(client.Destinations(from));
 
             return destinationList;
         }
 
-        public JsonMessage ListSearch(string initial, string destination)
+        public JsonMessage Search(string from, string to)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-           // string destinationList = serializer.Serialize();
+            JsonMessage searchList = new JsonMessage();
+            searchList.Message = serializer.Serialize(client.Search(from, to));
 
-            return null; //base.Channel.Search();
+            return searchList;
         }
 
-        public JsonMessage ListWatch(string initial, string destination)
+        public JsonMessage Watch(string from, string to)
         {
             JavaScriptSerializer serializer = new JavaScriptSerializer();
-           // string destinationList = serializer.Serialize();
+            JsonMessage WatchList = new JsonMessage();
+            WatchList.Message = serializer.Serialize(client.Watch(from, to));
 
-            return null; // base.Channel.Watch();
-        }
-
-        public string[] Cities()
-        {
-            return base.Channel.Cities();
-        }
-
-        public string[] Destinations(string from)
-        {
-            return base.Channel.Destinations(from);
-        }
-
-        public string[] Search(string from, string to)
-        {
-            return base.Channel.Search(from, to);
-        }
-
-        public string[] Watch(string from, string to)
-        {
-            return base.Channel.Watch(from, to);
+            return WatchList;
         }
     }
 }
