@@ -20,6 +20,11 @@ namespace Forms_Client.View
             _presenter = Presenter.Presenter.GetInstance();
         }
 
+        private void Overview_Form_Shown(object sender, EventArgs e)
+        {
+            _presenter.PopulateOverview();
+        }
+
         private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -42,11 +47,12 @@ namespace Forms_Client.View
 
         public void DescriptopnLabelText(string text)
         {
-            DescriptionLabel.Text = text;
+            DescriptionLabel.Text =  text;
         }
         public void PriceLabelText(decimal price)
         {
-            PriceLabel.Text = price.ToString();
+            PriceLabel.Text = "Pris:\n\n" + price.ToString() +" kr.";
         }
+
     }
 }

@@ -84,6 +84,7 @@
             this.Name = "Overview_Form";
             this.Text = "Overview_Form";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Overview_Form_FormClosing);
+            this.Shown += new System.EventHandler(this.Overview_Form_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

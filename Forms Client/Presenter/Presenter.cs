@@ -32,7 +32,6 @@ namespace Forms_Client.Presenter
             if (_instance == null)
             {
                 _instance = new Presenter();
-                _instance.Overview = new View.Overview_Form();
             }
 
             return _instance;
@@ -50,6 +49,7 @@ namespace Forms_Client.Presenter
             {
                 var request = String.Format("search flights {0} {1}", Main.FromBoxText, Main.ToBoxText);
                 _flight = _prox.Request(request);
+                _instance.Overview = new View.Overview_Form();
                 Overview.Show();
             }
         }
@@ -76,7 +76,7 @@ namespace Forms_Client.Presenter
             var item1 = response.Value.Item1;
 
             var price = response.Value.Item2;
-            var description = String.Format("Din rejse:\n{0}", String.Join("\n", item1));
+            var description = String.Format("Din rejse:\n\n{0}", String.Join("\n\n", item1));
 
             Overview.DescriptopnLabelText(description);
             Overview.PriceLabelText(price);
