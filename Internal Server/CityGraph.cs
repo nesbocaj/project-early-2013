@@ -7,11 +7,24 @@ using System.Threading.Tasks;
 
 namespace Internal_Server
 {
+	/// <summary>
+	/// GraphTraversal klasse indeholder en  BreadthFirst og DepthFirst som bruges til at printe vertices og edges
+	///  => sådan at rækkefølgen stemmer overens med at den korteste vej mellem to punkter findes;
+	/// BreadthFirst bruger en Queue list som elementer indsættes i;
+	/// DepthFirst bruger Stack når der pushes elementer i den;
+	/// </summary>
+	 
 	enum GraphTraversal
 	{
 		BreadthFirst,
 		DepthFirst
 	}
+	/// <summary>
+	///_instance er en singleton instannce og da den er static får den global adgang til alle andre objekter i klassen;
+	/// _vertices består af en list af vertices værdier;
+	/// Random indeholder tilfældige int værdier fra min til max og her bruges den i forbindelse med prisen;
+	///lastinitial er væriden til den sidste element i graphen når loop løber igennem det hele;
+	/// </summary>
 
 	class CityGraph
 	{
@@ -19,12 +32,19 @@ namespace Internal_Server
 		private List<Vertex> _vertices;
 		private static Random _randomizer = new Random();
 		private string lastInitial;
-
+		/// <summary>
+		/// Her oprettes Constructor CityGraph()
+		/// Constructor giver dens variable en start værdi => _vertices = new List<Vertex>();
+		/// </summary>
 		private CityGraph()
 		{
 			_vertices = new List<Vertex>();
 		}
 
+		/// <summary>
+		/// Properties til CityGraph//
+		/// Her hentes instansen der bruges til alle objekter i klassen GraphCity();
+		/// </summary>
 		public static CityGraph Instance
 		{
 			get
@@ -35,11 +55,20 @@ namespace Internal_Server
 			}
 		}
 
+		/// <summary>
+		/// Property til string [] array af Cities
+		/// Her hentes alle Citynames fra listen 
+		/// </summary>
+		
 		public string[] Cities
 		{
 			get { return _vertices.Select(v => v.CityName).ToArray(); }
 		}
-
+		/// <summary>
+		/// Metode InsertVertex indsætter alle de vertices i deres poistioner;
+		/// InserVertex tager parameter params string[] citynames til specificering af positioner til de indsatte vertices i graphen
+		/// </summary>
+		/// <param name="cityNames"></param>
 		public void InsertVertex(params string[] cityNames)
 		{
 			Debug.WriteLine("CityGraph.InsertVertex");
@@ -57,7 +86,13 @@ namespace Internal_Server
 
 			Debug.WriteLine("");
 		}
-
+		/// <summary>
+		/// Method AddEdges add edges between vertices if edges exist 
+		/// Method takes vertex as a parameter.
+		/// vertex consist of a single instance of cityname and usually will be connected with other vertices when edges are added to graph;
+		/// Between 2 or more vertices there is a price which are also added as soon as the edges are added. 
+		/// </summary> 
+		/// <param name="vertex"></param>
 		private void AddEdges(Vertex vertex)
 		{
 			Debug.WriteLine("CityGraph.AddEdges");
@@ -87,7 +122,11 @@ namespace Internal_Server
 
 			Debug.WriteLine("");
 		}
-
+		/// <summary>
+		/// Method RemoveEdges() remove a vertex from graph from its current position:
+		/// </summary>
+		/// <param name="waypointA"></param>
+		/// <param name="waypointB"></param>
 		public void RemoveEdges(string waypointA, string waypointB)
 		{
 			var vertexA = _vertices
@@ -101,6 +140,14 @@ namespace Internal_Server
 			int indexB = vertexB.Edges.FindIndex(e => e.Endpoint.Equals(vertexA));
 			vertexB.Edges.RemoveAt(indexB);
 		}
+		/// <summary>
+		/// ListDestinations show all the list of the Citynames destination from a specific position
+		/// ListDestination method takes a parameter string initial som refererer til startposition;
+		/// Startposition(initial) referes to specific cityname destinations and will be listed as the list are not equal to the initial vetex
+		
+		/// </summary>
+		/// <param name="initial"></param>
+		/// <returns></returns>
 
 		public string[] ListDestinations(string initial)
 		{
