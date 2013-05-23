@@ -150,12 +150,12 @@ namespace Internal_Server
 				.ToArray();
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="initial">Is the starting city's name</param>
-        /// <param name="destination">Is the destination city's name</param>
-        /// <returns>Returns a tuple that holds an array of the cities it went through, and the total price of the traversal</returns>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="initial">Is the starting city's name</param>
+		/// <param name="destination">Is the destination city's name</param>
+		/// <returns>Returns a tuple that holds an array of the cities it went through, and the total price of the traversal</returns>
 		public Tuple<string[], decimal> FindCheapestPath(string initial, string destination)
 		{
 			var resultingPath = new List<Vertex>();
