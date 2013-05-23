@@ -31,7 +31,7 @@ namespace Forms_Client.Presenter
         }
 
         /// <summary>
-        /// Instance Accessor of the singleton class
+        /// Instance Accessor of the Presenter class
         /// </summary>
         /// <returns></returns>
         public static Presenter GetInstance()
