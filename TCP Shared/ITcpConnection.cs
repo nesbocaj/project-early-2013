@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TCP_Shared
 {
+    /// <summary>
+    /// Implements the proxypattern
+    /// </summary>
     public interface ITcpConnection
     {
         string Request(string command);
