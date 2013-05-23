@@ -23,6 +23,7 @@ namespace Web_Server
             _serializer = new JavaScriptSerializer();
         }
 
+        //Test metode.
         public JsonMessage TestMethod()
         {
             JsonMessage cityList = new JsonMessage();
