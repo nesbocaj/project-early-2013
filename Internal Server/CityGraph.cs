@@ -32,9 +32,9 @@ namespace Internal_Server
 		private List<Vertex> _vertices;
 		private static Random _randomizer = new Random();
 		private string lastInitial;
+
 		/// <summary>
-		/// Her oprettes Constructor CityGraph()
-		/// Constructor giver dens variable en start værdi => _vertices = new List<Vertex>();
+		/// Creates a constructor for CityGraph
 		/// </summary>
 		private CityGraph()
 		{
@@ -42,8 +42,8 @@ namespace Internal_Server
 		}
 
 		/// <summary>
-		/// Properties til CityGraph//
-		/// Her hentes instansen der bruges til alle objekter i klassen GraphCity();
+		/// Property for CityGraph
+		/// Gets the instance that's being used in all objects of the class CityGraph
 		/// </summary>
 		public static CityGraph Instance
 		{
@@ -56,19 +56,17 @@ namespace Internal_Server
 		}
 
 		/// <summary>
-		/// Property til string [] array af Cities
-		/// Her hentes alle Citynames fra listen 
+		/// Gets all the Citynames from the list
 		/// </summary>
-		
 		public string[] Cities
 		{
 			get { return _vertices.Select(v => v.CityName).ToArray(); }
 		}
+
 		/// <summary>
-		/// Metode InsertVertex indsætter alle de vertices i deres poistioner;
-		/// InserVertex tager parameter params string[] citynames til specificering af positioner til de indsatte vertices i graphen
+		/// Adds all the vertices into their respective positions
 		/// </summary>
-		/// <param name="cityNames"></param>
+		/// <param name="cityNames">Specifies the position of the added vertices in the graph</param>
 		public void InsertVertex(params string[] cityNames)
 		{
 			Debug.WriteLine("CityGraph.InsertVertex");
@@ -86,13 +84,11 @@ namespace Internal_Server
 
 			Debug.WriteLine("");
 		}
+
 		/// <summary>
-		/// Method AddEdges add edges between vertices if edges exist 
-		/// Method takes vertex as a parameter.
-		/// vertex consist of a single instance of cityname and usually will be connected with other vertices when edges are added to graph;
-		/// Between 2 or more vertices there is a price which are also added as soon as the edges are added. 
+		/// Adds edges between vertices if none exist
 		/// </summary> 
-		/// <param name="vertex"></param>
+		/// <param name="vertex">A vertex that needs to be connected to the rest of the graph</param>
 		private void AddEdges(Vertex vertex)
 		{
 			Debug.WriteLine("CityGraph.AddEdges");
@@ -123,10 +119,10 @@ namespace Internal_Server
 			Debug.WriteLine("");
 		}
 		/// <summary>
-		/// Method RemoveEdges() remove a vertex from graph from its current position:
+		/// Removes the edge between Waypoint A and B
 		/// </summary>
-		/// <param name="waypointA"></param>
-		/// <param name="waypointB"></param>
+		/// <param name="waypointA">The value of a vertex in the graph</param>
+		/// <param name="waypointB">The value of a vertex in the graph</param>
 		public void RemoveEdges(string waypointA, string waypointB)
 		{
 			var vertexA = _vertices
@@ -140,15 +136,12 @@ namespace Internal_Server
 			int indexB = vertexB.Edges.FindIndex(e => e.Endpoint.Equals(vertexA));
 			vertexB.Edges.RemoveAt(indexB);
 		}
-		/// <summary>
-		/// ListDestinations show all the list of the Citynames destination from a specific position
-		/// ListDestination method takes a parameter string initial som refererer til startposition;
-		/// Startposition(initial) referes to specific cityname destinations and will be listed as the list are not equal to the initial vetex
-		
-		/// </summary>
-		/// <param name="initial"></param>
-		/// <returns></returns>
 
+		/// <summary>
+		/// Shows a list of all the destinations from a specific position
+		/// </summary>
+		/// <param name="initial">The city to be excluded from the list</param>
+		/// <returns>A filtered Array of city names where the parameter isn't present</returns>
 		public string[] ListDestinations(string initial)
 		{
 			return _vertices
@@ -157,6 +150,12 @@ namespace Internal_Server
 				.ToArray();
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="initial">Is the starting city's name</param>
+        /// <param name="destination">Is the destination city's name</param>
+        /// <returns>Returns a tuple that holds an array of the cities it went through, and the total price of the traversal</returns>
 		public Tuple<string[], decimal> FindCheapestPath(string initial, string destination)
 		{
 			var resultingPath = new List<Vertex>();
@@ -299,6 +298,7 @@ namespace Internal_Server
 			return new Tuple<string[], decimal>(waypoints, totalPrice);
 		}
 
+
 		public void ApplyDiscount(string waypointA, string waypointB)
 		{
 			Debug.WriteLine("CityGraph.ApplyDiscount");
@@ -325,11 +325,13 @@ namespace Internal_Server
 			Debug.WriteLine("");
 		}
 
+
 		private Vertex FindVertex(string cityName)
 		{
 			return _vertices
 				.Find(v => v.CityName.Equals(cityName, StringComparison.InvariantCultureIgnoreCase));
 		}
+
 
 		private class Vertex
 		{
