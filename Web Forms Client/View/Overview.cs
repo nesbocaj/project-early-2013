@@ -17,6 +17,7 @@ namespace Web_Forms_Client.View
         {
             InitializeComponent();
             _presenter = Presenter.Presenter.Getinstance();
+            _presenter.GetSearchList();
         }
 
         private void CancelButton_Click(object sender, EventArgs e)

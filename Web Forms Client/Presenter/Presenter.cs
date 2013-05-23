@@ -69,7 +69,7 @@ namespace Web_Forms_Client.Presenter
             _webClient.DownloadStringCompleted += client_GetCityListCompleted;
 
             _webClient.DownloadStringAsync(
-                new Uri(string.Format("{0}/Test",
+                new Uri(string.Format("{0}/list/cities",
                 _baseUrl)));
         }
 
@@ -80,15 +80,87 @@ namespace Web_Forms_Client.Presenter
                 DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(JsonMessage));
                 JsonMessage message = (JsonMessage)Serializer.ReadObject(new MemoryStream(Encoding.Unicode.GetBytes(e.Result)));
                 JavaScriptSerializer js = new JavaScriptSerializer();
-                string[] texties = js.Deserialize<string[]>(message.Message);
+                string[] cList = js.Deserialize<string[]>(message.Message);
 
                 //string test = xmlResponse.Root.Value;
-                Main.ShowCities(texties);
+                Main.ShowCities(cList);
+            }
+            _webClient.DownloadStringCompleted -= client_GetCityListCompleted;
+
+        }
+
+        public void GetDestinationList(string from)
+        {
+            _webClient.DownloadStringCompleted += client_GetDestinationListCompleted;
+
+            _webClient.DownloadStringAsync(
+                new Uri(string.Format("{0}/list/destinations/{1}",
+                _baseUrl, from)));
+        }
+
+        private void client_GetDestinationListCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            if (e.Error == null)
+            {
+                DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(JsonMessage));
+                JsonMessage message = (JsonMessage)Serializer.ReadObject(new MemoryStream(Encoding.Unicode.GetBytes(e.Result)));
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                string[] dList = js.Deserialize<string[]>(message.Message);
+
+                //Main.ShowCities(dList);
             }
 
+            _webClient.DownloadStringCompleted -= client_GetDestinationListCompleted;
 
+        }
 
-            _webClient.DownloadStringCompleted -= client_GetCityListCompleted;
+        public void GetSearchList(string from, string to)
+        {
+            _webClient.DownloadStringCompleted += client_GetSearchListCompleted;
+
+            _webClient.DownloadStringAsync(
+                new Uri(string.Format("{0}/search?From={1}&To={2}",
+                _baseUrl, from, to)));
+        }
+
+        private void client_GetSearchListCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            if (e.Error == null)
+            {
+                DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(JsonMessage));
+                JsonMessage message = (JsonMessage)Serializer.ReadObject(new MemoryStream(Encoding.Unicode.GetBytes(e.Result)));
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                string[] sList = js.Deserialize<string[]>(message.Message);
+
+                //Main.ShowCities(sList);
+            }
+
+            _webClient.DownloadStringCompleted -= client_GetSearchListCompleted;
+
+        }
+
+        public void GetWatchList(string from, string to)
+        {
+            _webClient.DownloadStringCompleted += client_GetWatchListCompleted;
+
+            _webClient.DownloadStringAsync(
+                new Uri(string.Format("{0}/watch?From={1}&To={2}",
+                _baseUrl, from, to)));
+        }
+
+        private void client_GetWatchListCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            if (e.Error == null)
+            {
+                DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(JsonMessage));
+                JsonMessage message = (JsonMessage)Serializer.ReadObject(new MemoryStream(Encoding.Unicode.GetBytes(e.Result)));
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                string[] wList = js.Deserialize<string[]>(message.Message);
+
+                //Main.ShowCities(wList);
+            }
+
+            _webClient.DownloadStringCompleted -= client_GetWatchListCompleted;
 
         }
 

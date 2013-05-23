@@ -18,6 +18,7 @@ namespace Web_Forms_Client
             InitializeComponent();
             _presenter = Presenter.Presenter.Getinstance();
             _presenter.Main = this;
+            _presenter.GetCityList();
         }
 
         private void OKButton_Click(object sender, EventArgs e)
@@ -31,6 +32,7 @@ namespace Web_Forms_Client
             foreach (string i in PCityList)
             {
                 FromBox.Items.Add(i);
+                ToBox.Items.Add(i);
             }
             
         }
