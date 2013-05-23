@@ -18,19 +18,19 @@ namespace Web_Server
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/list/cities")]
-        JsonMessage Cities();
+        JsonMessage ListCities();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/list/destinations/{initial}")]
-        JsonMessage Destinations(string initial);
+        JsonMessage ListDestinations(string initial);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/search?From={initial}&To={destination}")]
-        JsonMessage Search(string initial, string destination);
+        JsonMessage SearchFlight(string initial, string destination);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/watch?From={initial}&To={destination}")]
-        JsonMessage Watch(string initial, string destination);                 
+        void WatchFlight(string initial, string destination);                 
     }
 
     [DataContract]

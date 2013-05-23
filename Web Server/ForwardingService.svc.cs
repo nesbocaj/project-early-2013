@@ -14,16 +14,17 @@ namespace Web_Server
     // NOTE: In order to launch WCF Test Client for testing this service, please select ForwardingService.svc or ForwardingService.svc.cs at the Solution Explorer and start debugging.
     public class ForwardingService : IForwardingService
     {
-        private SOAPConsumer client;
+        private SOAPConsumer _client;
+        private JavaScriptSerializer _serializer;
 
         public ForwardingService()
         {
-            client = new SOAPConsumer();
+            _client = new SOAPConsumer();
+            _serializer = new JavaScriptSerializer();
         }
 
         public JsonMessage TestMethod()
         {
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
             JsonMessage cityList = new JsonMessage();
             cityList.Message = "[{index:'0',name:'Copenhagen'},{index:'1',name:'Beijing'}]";
 
@@ -31,40 +32,34 @@ namespace Web_Server
         }
 
 
-        public JsonMessage Cities()
+        public JsonMessage ListCities()
         {                           
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            
             JsonMessage cityList = new JsonMessage();
-            cityList.Message = serializer.Serialize(client.Cities());
+            cityList.Message = _serializer.Serialize(_client.ListCities());
 
             return cityList;
         }
 
-        public JsonMessage Destinations(string from)
+        public JsonMessage ListDestinations(string from)
         {
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
             JsonMessage destinationList = new JsonMessage();
-            destinationList.Message = serializer.Serialize(client.Destinations(from));
+            destinationList.Message = _serializer.Serialize(_client.ListDestinations(from));
 
             return destinationList;
         }
 
-        public JsonMessage Search(string from, string to)
+        public JsonMessage SearchFlight(string from, string to)
         {
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
             JsonMessage searchList = new JsonMessage();
-            searchList.Message = serializer.Serialize(client.Search(from, to));
+            searchList.Message = _serializer.Serialize(_client.SearchFlight(from, to));
 
             return searchList;
         }
 
-        public JsonMessage Watch(string from, string to)
+        public void WatchFlight(string from, string to)
         {
-            JavaScriptSerializer serializer = new JavaScriptSerializer();
-            JsonMessage WatchList = new JsonMessage();
-            WatchList.Message = serializer.Serialize(client.Watch(from, to));
-
-            return WatchList;
+            _client.WatchFlight(from, to);
         }
     }
 }

@@ -12,15 +12,15 @@ namespace Internal_Server
     public interface ISOAPService
     {
         [OperationContract(IsOneWay = false)]
-        string[] Cities();
+        string[] ListCities();
 
         [OperationContract(IsOneWay = false)]
-        string[] Destinations(string from);
+        string[] ListDestinations(string from);
 
         [OperationContract(IsOneWay = false)]
-        string[] Search(string from, string to);
+        Tuple<string[], decimal> SearchFlight(string from, string to);
 
-        [OperationContract(IsOneWay = false)]
-        string[] Watch(string from, string to);
+        [OperationContract(IsOneWay = true)]
+        void WatchFlight(string from, string to);
     }
 }

@@ -7,28 +7,33 @@ using System.Text;
 
 namespace Internal_Server
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "SOAPService" in both code and config file together.
     public class SOAPService : ISOAPService
     {
+        private CityGraph _graph;
 
-        public string[] Cities()
+        public SOAPService()
         {
-            return null;
+            _graph = CityGraph.Instance;
         }
 
-        public string[] Destinations(string from)
+        public string[] ListCities()
         {
-            return null;
+            return _graph.Cities;
         }
 
-        public string[] Search(string from, string to)
+        public string[] ListDestinations(string from)
         {
-            return null;
+            return _graph.ListDestinations(from);
         }
 
-        public string[] Watch(string from, string to)
+        public Tuple<string[], decimal> SearchFlight(string from, string to)
         {
-            return null;
+            return _graph.FindCheapestPath(from, to);
+        }
+
+        public void WatchFlight(string from, string to)
+        {
+
         }
     }
 }

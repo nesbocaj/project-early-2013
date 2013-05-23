@@ -12,24 +12,24 @@ namespace Web_Server
 {
     public class SOAPConsumer : ClientBase<Internal_Server.ISOAPService>, Internal_Server.ISOAPService
     {
-        public string[] Cities()
+        public string[] ListCities()
         {
-            return base.Channel.Cities();
+            return base.Channel.ListCities();
         }
 
-        public string[] Destinations(string from)
+        public string[] ListDestinations(string from)
         {
-            return base.Channel.Destinations(from);
+            return base.Channel.ListDestinations(from);
         }
 
-        public string[] Search(string from, string to)
+        public Tuple<string[], decimal> SearchFlight(string from, string to)
         {
-            return base.Channel.Search(from, to);
+            return base.Channel.SearchFlight(from, to);
         }
 
-        public string[] Watch(string from, string to)
+        public void WatchFlight(string from, string to)
         {
-            return base.Channel.Watch(from, to);
+            base.Channel.WatchFlight(from, to);
         }
     }
 }
