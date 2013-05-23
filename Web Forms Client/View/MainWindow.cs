@@ -22,8 +22,17 @@ namespace Web_Forms_Client
 
         private void OKButton_Click(object sender, EventArgs e)
         {
-            //_presenter.CallOverview();
-            _presenter.GetCityList();
+            _presenter.CallOverview();
+            
+        }
+
+        public void ShowCities(string[] PCityList)
+        {
+            foreach (string i in PCityList)
+            {
+                FromBox.Items.Add(i);
+            }
+            
         }
 
         public string[] ChosenCities()

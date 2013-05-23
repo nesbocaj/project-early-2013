@@ -12,9 +12,10 @@ namespace Web_Server
     [ServiceContract]
     public interface IForwardingService
     {
+
         [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/list/Test")]
-        JsonMessage TestMethod();
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/test")]
+        JsonMessage Test();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/list/cities")]

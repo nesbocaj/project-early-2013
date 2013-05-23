@@ -63,12 +63,13 @@ namespace Web_Forms_Client.Presenter
             }
         }
 
+        //Jeg arbejder her. -Dennis-
         public void GetCityList()
         {
             _webClient.DownloadStringCompleted += client_GetCityListCompleted;
 
             _webClient.DownloadStringAsync(
-                new Uri(string.Format("{0}/list/Test",
+                new Uri(string.Format("{0}/Test",
                 _baseUrl)));
         }
 
@@ -79,13 +80,16 @@ namespace Web_Forms_Client.Presenter
                 DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(JsonMessage));
                 JsonMessage message = (JsonMessage)Serializer.ReadObject(new MemoryStream(Encoding.Unicode.GetBytes(e.Result)));
                 JavaScriptSerializer js = new JavaScriptSerializer();
-                string[] Cities = js.Deserialize<string[]>(message.Message);
+                string[] texties = js.Deserialize<string[]>(message.Message);
 
                 //string test = xmlResponse.Root.Value;
-
+                Main.ShowCities(texties);
             }
 
+
+
             _webClient.DownloadStringCompleted -= client_GetCityListCompleted;
+
         }
 
         public class JsonMessage

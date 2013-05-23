@@ -23,15 +23,13 @@ namespace Web_Server
             _serializer = new JavaScriptSerializer();
         }
 
-        //Test metode.
-        public JsonMessage TestMethod()
+        public JsonMessage Test()
         {
-            JsonMessage cityList = new JsonMessage();
-            cityList.Message = "[{index:'0',name:'Copenhagen'},{index:'1',name:'Beijing'}]";
+            JsonMessage test = new JsonMessage();
+            test.Message = _serializer.Serialize("Hej");
 
-            return cityList;
+            return test;
         }
-
 
         public JsonMessage ListCities()
         {                           
