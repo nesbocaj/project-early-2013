@@ -10,16 +10,25 @@ using TCP_Shared;
 
 namespace Internal_Server
 {
+    /// <summary>
+    /// Represents the serverside implementation of ITcpConnection
+    /// </summary>
     class TcpConnection : ITcpConnection
     {
         private static TcpConnection _instance;
         private CityGraph _graph;
 
+        /// <summary>
+        /// Initializes a new instance of the Internal_Server.TcpConnection class
+        /// </summary>
         private TcpConnection()
         {
             _graph = CityGraph.Instance;
         }
 
+        /// <summary>
+        /// Instance accessor for the Internal_Server.TcpConnection class
+        /// </summary>
         public static TcpConnection Instance
         {
             get
@@ -30,6 +39,10 @@ namespace Internal_Server
             }
         }
 
+        /// <summary>
+        /// Manages the TCP client request
+        /// </summary>
+        /// <param name="currentSocket">The socket the client is connected to</param>
         public void ManageClient(Socket currentSocket)
         {
             var stream = new NetworkStream(currentSocket);
@@ -58,9 +71,16 @@ namespace Internal_Server
          * watch flight <waypoint cities, ...>
          */
 
+        /// <summary>
+        /// Handles a client request based on the specified command
+        /// meaning the command is parsed and the appropriate request handler is called. 
+        /// Finally a TCP_Shared.Response&lt;T&gt; is generated and serialized for transmission
+        /// </summary>
+        /// <param name="command">The command specified by the client</param>
+        /// <returns>A serialized version of the adequate TCP_Shared.Response&lt;T&gt; object</returns>
         public string Request(string command)
         {
-            string serialized = default(string);
+            var serialized = default(string);
             var parsed = ParseCommand(command);
             var commandIdentifier = parsed[0];
             parsed.RemoveAt(0);
@@ -128,6 +148,10 @@ namespace Internal_Server
             return serialized;
         }
 
+        /// <summary>
+        /// Returns a list of all the commands
+        /// </summary>
+        /// <returns>A list of all the commands</returns>
         private Response<string[]> ShowHelp()
         {
             return new Response<string[]>(
@@ -142,6 +166,10 @@ namespace Internal_Server
                 "The following commands are available");
         }
 
+        /// <summary>
+        /// Returns CityGraph.CityList for the CityGraph instance
+        /// </summary>
+        /// <returns>A list of cities packed in a TCP_Shared.Response&lt;string[]&gt;</returns>
         private Response<string[]> ListCities()
         {
             return new Response<string[]>(
@@ -150,6 +178,11 @@ namespace Internal_Server
                 "The possible cities are the following");
         }
 
+        /// <summary>
+        /// Returns CityGraph.Destinations(initial) for the CityGraph instance
+        /// </summary>
+        /// <param name="initial">The city for which the destinations should be found</param>
+        /// <returns>A list of destinations packed in a TCP_Shared.Response&lt;string[]&gt;</returns>
         private Response<string[]> ListDestinations(string initial)
         {
             return new Response<string[]>(
@@ -158,6 +191,13 @@ namespace Internal_Server
                 String.Format("{0} is connected to the following destinations", initial));
         }
 
+        /// <summary>
+        /// Returns CityGraph.FindCheapestPath(initial, destination) for the CityGraph instance
+        /// </summary>
+        /// <param name="initial">The startpoint</param>
+        /// <param name="destination">The endpoint</param>
+        /// <returns>A list of the traversed waypoints and their cost
+        /// packed in a TCP_Shared.Response&lt;&gt;</returns>
         private Response<Tuple<string[], decimal>> SearchFlights(string initial, string destination)
         {
             var result = _graph.FindCheapestPath(initial, destination);
@@ -179,6 +219,11 @@ namespace Internal_Server
             
         }
 
+        /// <summary>
+        /// Parses the specified command
+        /// </summary>
+        /// <param name="command">The recieved command</param>
+        /// <returns>A string array consisting of the command identifier and its arguments</returns>
         private List<string> ParseCommand(string command)
         {
             bool inQuotes = false;
