@@ -26,7 +26,8 @@ namespace Web_Server
         public JsonMessage Test()
         {
             JsonMessage test = new JsonMessage();
-            test.Message = _serializer.Serialize("Hej");
+            //test.Message = _serializer.Serialize("Hej");
+            test.Message = _serializer.Serialize(_client.Test());
 
             return test;
         }

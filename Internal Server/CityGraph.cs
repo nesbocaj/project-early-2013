@@ -58,6 +58,12 @@ namespace Internal_Server
 		/// <summary>
 		/// Gets all the Citynames from the list
 		/// </summary>
+        /// 
+        public string TestSOAP()
+        {
+            return "Accepted";
+        }
+
 		public string[] Cities
 		{
 			get { return _vertices.Select(v => v.CityName).ToArray(); }

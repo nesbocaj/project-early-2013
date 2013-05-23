@@ -64,6 +64,32 @@ namespace Web_Forms_Client.Presenter
         }
 
         //Jeg arbejder her. -Dennis-
+
+        public void Test()
+        {
+            _webClient.DownloadStringCompleted += client_TestCompleted;
+
+            _webClient.DownloadStringAsync(
+                new Uri(string.Format("{0}/test",
+                _baseUrl)));
+        }
+
+        private void client_TestCompleted(object sender, DownloadStringCompletedEventArgs e)
+        {
+            if (e.Error == null)
+            {
+                DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(JsonMessage));
+                JsonMessage message = (JsonMessage)Serializer.ReadObject(new MemoryStream(Encoding.Unicode.GetBytes(e.Result)));
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                string[] cList = js.Deserialize<string[]>(message.Message);
+
+                //string test = xmlResponse.Root.Value;
+                //Main.ShowCities(cList);
+            }
+            _webClient.DownloadStringCompleted -= client_TestCompleted;
+
+        }
+
         public void GetCityList()
         {
             _webClient.DownloadStringCompleted += client_GetCityListCompleted;

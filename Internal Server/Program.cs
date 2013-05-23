@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +25,9 @@ namespace Internal_Server
             _connection = TcpConnection.Instance;
 
             Console.WriteLine("Airline Server");
+
+            var soapHost = new ServiceHost(typeof(SOAPService));
+            soapHost.BeginOpen(null, soapHost);
 
             var listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 7000);
             listener.Start();

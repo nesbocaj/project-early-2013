@@ -17,6 +17,9 @@ namespace Internal_Server
         string[] ListDestinations(string from);
 
         [OperationContract(IsOneWay = false)]
+        string Test();
+
+        [OperationContract(IsOneWay = false)]
         Tuple<string[], decimal> SearchFlight(string from, string to);
 
         [OperationContract(IsOneWay = true)]

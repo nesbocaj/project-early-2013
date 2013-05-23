@@ -22,6 +22,11 @@ namespace Web_Server
             return base.Channel.ListDestinations(from);
         }
 
+        public string Test()
+        {
+            return base.Channel.Test();
+        }
+
         public Tuple<string[], decimal> SearchFlight(string from, string to)
         {
             return base.Channel.SearchFlight(from, to);
