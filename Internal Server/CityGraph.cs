@@ -8,24 +8,8 @@ using System.Threading.Tasks;
 namespace Internal_Server
 {
 	/// <summary>
-	/// GraphTraversal klasse indeholder en  BreadthFirst og DepthFirst som bruges til at printe vertices og edges
-	///  => sådan at rækkefølgen stemmer overens med at den korteste vej mellem to punkter findes;
-	/// BreadthFirst bruger en Queue list som elementer indsættes i;
-	/// DepthFirst bruger Stack når der pushes elementer i den;
+	/// Represents the cities and their in-between routes
 	/// </summary>
-	 
-	enum GraphTraversal
-	{
-		BreadthFirst,
-		DepthFirst
-	}
-	/// <summary>
-	///_instance er en singleton instannce og da den er static får den global adgang til alle andre objekter i klassen;
-	/// _vertices består af en list af vertices værdier;
-	/// Random indeholder tilfældige int værdier fra min til max og her bruges den i forbindelse med prisen;
-	///lastinitial er væriden til den sidste element i graphen når loop løber igennem det hele;
-	/// </summary>
-
 	class CityGraph
 	{
 		private static CityGraph _instance;
@@ -58,11 +42,11 @@ namespace Internal_Server
 		/// <summary>
 		/// Gets all the Citynames from the list
 		/// </summary>
-        /// 
-        public string TestSOAP()
-        {
-            return "Accepted";
-        }
+		/// 
+		public string TestSOAP()
+		{
+			return "Accepted";
+		}
 
 		public string[] Cities
 		{
