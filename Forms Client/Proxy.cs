@@ -22,21 +22,34 @@ namespace Forms_Client
 
         public string Request(string command)
         {
+            var tcp = new TcpClient();
             string txt = "";
-            using (var tcp = new TcpClient())
+            SocketException ex = null;
+            for (int i = 0; i < 10 && !tcp.Connected; i++)
             {
-                tcp.Connect(IPAddress.Parse("127.0.0.1"), 7000);
-
-                if (tcp.Connected)
+                try
                 {
-                    var stream = tcp.GetStream();
-                    var binReader = new BinaryReader(stream);
-                    var binWriter = new BinaryWriter(stream);
-
-                    binWriter.Write(command);
-                    txt = binReader.ReadString();
+                    tcp.Connect(IPAddress.Parse("127.0.0.1"), 7000);
+                    break;
                 }
+                catch (SocketException se) 
+                {
+                    ex = se;
+                    continue;
+                }
+                
             }
+            if (tcp.Connected)
+            {
+                var stream = tcp.GetStream();
+                var binReader = new BinaryReader(stream);
+                var binWriter = new BinaryWriter(stream);
+
+                binWriter.Write(command);
+                txt = binReader.ReadString();
+            }
+            else throw ex;
+
             return txt;
         }
     }

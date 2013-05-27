@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.Net.Sockets;
+
 namespace Forms_Client.Presenter
 {
     class Presenter
@@ -14,7 +16,7 @@ namespace Forms_Client.Presenter
         private Proxy _prox = null;
         private string _resultString = null;
         private string _flight = null;
-
+        private Thread _backgroundWorker = null;
 
         private string[] _response = null;
         private string[] _filteredArray = null;
@@ -27,7 +29,26 @@ namespace Forms_Client.Presenter
         private Presenter()
         {
             _prox = new Proxy();
-            _resultString = _prox.Request("list cities");
+
+            //_backgroundWorker = new Thread(() =>
+            //);
+
+            try 
+            {
+                _resultString = _prox.Request("list cities");
+
+            }
+            catch (SocketException se)
+            {
+                MessageBox.Show(
+                    "Kunne ikke hente by-listen fra serveren" +
+                    "\nprøv venligst igen senere\n" +
+                    "\nVis denne fejl til din nærmeste IT support: \n" + 
+                    se.Message, 
+                    "Fejl! Kunne ikke forbinde til serveren", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+            }
         }
 
         /// <summary>
