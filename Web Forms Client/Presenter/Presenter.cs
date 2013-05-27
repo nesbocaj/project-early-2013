@@ -78,10 +78,8 @@ namespace Web_Forms_Client.Presenter
         {
             if (e.Error == null)
             {
-                DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(JsonMessage));
-                JsonMessage message = (JsonMessage)Serializer.ReadObject(new MemoryStream(Encoding.Unicode.GetBytes(e.Result)));
                 JavaScriptSerializer js = new JavaScriptSerializer();
-                string[] cList = js.Deserialize<string[]>(message.Message);
+                string[] cList = js.Deserialize<string[]>(e.Result);
 
                 //string test = xmlResponse.Root.Value;
                 //Main.ShowCities(cList);
@@ -103,10 +101,8 @@ namespace Web_Forms_Client.Presenter
         {
             if (e.Error == null)
             {
-                DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(JsonMessage));
-                JsonMessage message = (JsonMessage)Serializer.ReadObject(new MemoryStream(Encoding.Unicode.GetBytes(e.Result)));
                 JavaScriptSerializer js = new JavaScriptSerializer();
-                string[] cList = js.Deserialize<string[]>(message.Message);
+                string[] cList = js.Deserialize<string[]>(e.Result);
 
                 //string test = xmlResponse.Root.Value;
                 Main.ShowCities(cList);
@@ -128,10 +124,8 @@ namespace Web_Forms_Client.Presenter
         {
             if (e.Error == null)
             {
-                DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(JsonMessage));
-                JsonMessage message = (JsonMessage)Serializer.ReadObject(new MemoryStream(Encoding.Unicode.GetBytes(e.Result)));
                 JavaScriptSerializer js = new JavaScriptSerializer();
-                string[] dList = js.Deserialize<string[]>(message.Message);
+                string[] dList = js.Deserialize<string[]>(e.Result);
 
                 //Main.ShowCities(dList);
             }
@@ -153,10 +147,11 @@ namespace Web_Forms_Client.Presenter
         {
             if (e.Error == null)
             {
-                DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(JsonMessage));
-                JsonMessage message = (JsonMessage)Serializer.ReadObject(new MemoryStream(Encoding.Unicode.GetBytes(e.Result)));
                 JavaScriptSerializer js = new JavaScriptSerializer();
-                string[] sList = js.Deserialize<string[]>(message.Message);
+                JsonTuple sTuple = js.Deserialize<JsonTuple>(e.Result);
+
+                string[] sList = sTuple.Item1;
+                decimal sPrice = sTuple.Item2;
 
                 //Main.ShowCities(sList);
             }
@@ -178,10 +173,8 @@ namespace Web_Forms_Client.Presenter
         {
             if (e.Error == null)
             {
-                DataContractJsonSerializer Serializer = new DataContractJsonSerializer(typeof(JsonMessage));
-                JsonMessage message = (JsonMessage)Serializer.ReadObject(new MemoryStream(Encoding.Unicode.GetBytes(e.Result)));
                 JavaScriptSerializer js = new JavaScriptSerializer();
-                string[] wList = js.Deserialize<string[]>(message.Message);
+                string[] wList = js.Deserialize<string[]>(e.Result);
 
                 //Main.ShowCities(wList);
             }
@@ -190,9 +183,10 @@ namespace Web_Forms_Client.Presenter
 
         }
 
-        public class JsonMessage
+        public class JsonTuple
         {
-            public string Message;
+            public string[] Item1 { get; set; }
+            public decimal Item2 { get; set; }
         }
     }
 }

@@ -15,19 +15,19 @@ namespace Web_Server
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/test")]
-        JsonMessage Test();
+        string[] Test();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/list/cities")]
-        JsonMessage ListCities();
+        string[] ListCities();
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/list/destinations/{initial}")]
-        JsonMessage ListDestinations(string initial);
+        string[] ListDestinations(string initial);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/search?From={initial}&To={destination}")]
-        JsonMessage SearchFlight(string initial, string destination);
+        JsonTuple SearchFlight(string initial, string destination);
 
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/watch?From={initial}&To={destination}")]
@@ -35,9 +35,12 @@ namespace Web_Server
     }
 
     [DataContract]
-    public class JsonMessage
+    public class JsonTuple
     {
         [DataMember]
-        public string Message { get; set; }
+        public string[] Item1 { get; set; }
+
+        [DataMember]
+        public decimal Item2 { get; set; }
     }
 }

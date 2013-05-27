@@ -12,6 +12,11 @@ namespace Web_Server
 {
     public class SOAPConsumer : ClientBase<Internal_Server.ISOAPService>, Internal_Server.ISOAPService
     {
+        public string[] Test()
+        {
+            return base.Channel.Test();
+        }
+
         public string[] ListCities()
         {
             return base.Channel.ListCities();
@@ -20,11 +25,6 @@ namespace Web_Server
         public string[] ListDestinations(string from)
         {
             return base.Channel.ListDestinations(from);
-        }
-
-        public string Test()
-        {
-            return base.Channel.Test();
         }
 
         public Tuple<string[], decimal> SearchFlight(string from, string to)

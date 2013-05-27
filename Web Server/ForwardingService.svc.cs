@@ -23,38 +23,30 @@ namespace Web_Server
             _serializer = new JavaScriptSerializer();
         }
 
-        public JsonMessage Test()
+        public string[] Test()
         {
-            JsonMessage test = new JsonMessage();
-            //test.Message = _serializer.Serialize("Hej");
-            test.Message = _serializer.Serialize(_client.Test());
-
-            return test;
+            return _client.Test();
         }
 
-        public JsonMessage ListCities()
-        {                           
-            
-            JsonMessage cityList = new JsonMessage();
-            cityList.Message = _serializer.Serialize(_client.ListCities());
-
-            return cityList;
+        public string[] ListCities()
+        {
+            return _client.ListCities();
         }
 
-        public JsonMessage ListDestinations(string from)
+        public string[] ListDestinations(string from)
         {
-            JsonMessage destinationList = new JsonMessage();
-            destinationList.Message = _serializer.Serialize(_client.ListDestinations(from));
-
-            return destinationList;
+            return _client.ListDestinations(from);
         }
 
-        public JsonMessage SearchFlight(string from, string to)
+        public JsonTuple SearchFlight(string from, string to)
         {
-            JsonMessage searchList = new JsonMessage();
-            searchList.Message = _serializer.Serialize(_client.SearchFlight(from, to));
+            Tuple<string[], decimal> temp = _client.SearchFlight(from, to);
 
-            return searchList;
+            JsonTuple searchTuple = new JsonTuple();
+            searchTuple.Item1 = temp.Item1;
+            searchTuple.Item2 = temp.Item2;
+
+            return searchTuple;
         }
 
         public void WatchFlight(string from, string to)

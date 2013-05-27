@@ -18,7 +18,7 @@ namespace Web_Forms_Client
             InitializeComponent();
             _presenter = Presenter.Presenter.Getinstance();
             _presenter.Main = this;
-            //_presenter.GetCityList();
+            _presenter.GetCityList();
         }
 
         private void OKButton_Click(object sender, EventArgs e)
