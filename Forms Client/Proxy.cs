@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TCP_Shared;
 using System.Net.Sockets;
 using System.Net;
 using System.IO;
 using System.Diagnostics;
+using TCP_Shared;
 
 namespace Forms_Client
 {
