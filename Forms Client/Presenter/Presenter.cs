@@ -17,9 +17,6 @@ namespace Forms_Client.Presenter
         private static Presenter _instance = null;
         private bool _okButtonState = true;
         private Proxy _prox = null;
-        private string _resultString = null;
-        private string _flight = null;
-        private BackgroundWorker _backgroundWorker = null;
 
         private string[] _response = null;
         private string[] _filteredArray = null;
@@ -32,16 +29,6 @@ namespace Forms_Client.Presenter
         private Presenter()
         {
             _prox = new Proxy();
-
-            //_resultString = _prox.Request("list cities");
-
-            ///*
-            _backgroundWorker = new BackgroundWorker();
-            _backgroundWorker.DoWork += new DoWorkEventHandler(DoWork);
-            _backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(WorkCompleted);
-            _backgroundWorker.RunWorkerAsync();
-            Debug.WriteLine("++ OUR RESULT STRING = "+ _resultString); // check to see if it contains anything after exiting the bg worker
-            //*/
         }
 
         /// <summary>
@@ -58,22 +45,31 @@ namespace Forms_Client.Presenter
             return _instance;
         }
 
-        private void DoWork(object sender, DoWorkEventArgs e)
+        private void TransmitToServer(string command, Action<string> act ,Action<SocketException> handler)
         {
-            try
-            {
-                e.Result = _prox.Request("list cities");
-            }
-            catch (SocketException se)
-            {
-                ErrorMessage(se);
-            }
-        }
+            var backgroundWorker = new BackgroundWorker();
+            var resultString = "";
 
-        private void WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            _resultString = e.Result as string;
-            Debug.WriteLine("-- OUR RESULT STRING = " + _resultString);
+            Action<object, DoWorkEventArgs> doWork = (sender, e) =>
+            {
+                try
+                {
+                    e.Result = _prox.Request(command);
+                }
+                catch (SocketException se)
+                {
+                    handler(se);
+                }
+            };
+            Action<object, RunWorkerCompletedEventArgs> runWorkerCompleted = (sender, e) =>
+            {
+                resultString = e.Result as string;
+                act(resultString);
+            };
+
+            backgroundWorker.DoWork += new DoWorkEventHandler(doWork);
+            backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(runWorkerCompleted);
+            backgroundWorker.RunWorkerAsync();
         }
 
         /// <summary>
@@ -95,8 +91,6 @@ namespace Forms_Client.Presenter
                 MessageBox.Show("Du mangler at udfylde felterne", "FEJL!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                var request = String.Format("search flights {0} {1}", MainForm.FromBoxText, MainForm.ToBoxText);
-                _flight = _prox.Request(request);
                 _instance.OverviewForm = new View.Overview_Form();
                 OverviewForm.ShowDialog();
             }
@@ -126,15 +120,20 @@ namespace Forms_Client.Presenter
         /// </summary>
         public void PopulateOverview()
         {
-            var response = TCP_Shared.Response<Tuple<String[], Decimal>>.FromSerialized(_flight);
-            
-            var item1 = response.Value.Item1;
+            var request = String.Format("search flights {0} {1}", MainForm.FromBoxText, MainForm.ToBoxText);
 
-            var price = response.Value.Item2;
-            var description = String.Format("Din rejse:\n\n{0}", String.Join("\n\n", item1));
+            TransmitToServer(request, flight =>
+            {
+                var response = TCP_Shared.Response<Tuple<String[], Decimal>>.FromSerialized(flight);
 
-            OverviewForm.DescriptopnLabelText(description);
-            OverviewForm.PriceLabelText(price);
+                var item1 = response.Value.Item1;
+
+                var price = response.Value.Item2;
+                var description = String.Format("Din rejse:\n\n{0}", String.Join("\n\n", item1));
+
+                OverviewForm.DescriptopnLabelText(description);
+                OverviewForm.PriceLabelText(price);
+            }, null);
         }
 
         /// <summary>
@@ -142,12 +141,16 @@ namespace Forms_Client.Presenter
         /// </summary>
         public void PopulateFromList()
         {
-            if (_resultString != null)
+            TransmitToServer("list cities", res =>
             {
-                var responseString = TCP_Shared.Response<String[]>.FromSerialized(_resultString);
-                _response = responseString.Value;
-                MainForm.PopulateFromBox(_response);
-            }
+                if (!String.IsNullOrEmpty(res))
+                {
+                    var responseString = TCP_Shared.Response<String[]>.FromSerialized(res);
+                    _response = responseString.Value;
+                    MainForm.PopulateFromBox(_response);
+                }
+            }, 
+            null);
         }
 
         /// <summary>
@@ -169,11 +172,6 @@ namespace Forms_Client.Presenter
                 "Fejl! Kunne ikke forbinde til serveren",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Warning);
-        }
-
-        public void OnFromBoxClicked()
-        {
-            PopulateFromList();
         }
     }
 }

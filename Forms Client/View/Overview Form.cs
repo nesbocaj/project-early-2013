@@ -64,16 +64,6 @@ namespace Forms_Client.View
         }
 
         /// <summary>
-        /// Saves a new instance of the form when the form is closing
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Overview_Form_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            _presenter.OverviewForm = new Overview_Form();
-        }
-
-        /// <summary>
         /// Sets the text that will be displayed in the DescriptionLabel
         /// </summary>
         /// <param name="text"></param>

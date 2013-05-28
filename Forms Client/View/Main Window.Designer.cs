@@ -105,6 +105,7 @@
             this.Controls.Add(this.label1);
             this.Name = "MainWindow";
             this.Text = "Søg Rejse";
+            this.Shown += new System.EventHandler(this.MainWindow_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

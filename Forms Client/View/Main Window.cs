@@ -23,7 +23,12 @@ namespace Forms_Client.View
             InitializeComponent();
             _presenter = Presenter.Presenter.GetInstance();
             _presenter.MainForm = this;
-            //_presenter.PopulateFromList();
+        }
+
+        private void MainWindow_Shown(object sender, EventArgs e)
+        {
+            FromBox.Items.Clear();
+            _presenter.PopulateFromList();
         }
 
         /// <summary>
@@ -116,8 +121,7 @@ namespace Forms_Client.View
 
         private void FromBox_Click(object sender, EventArgs e)
         {
-            FromBox.Items.Clear();
-            _presenter.OnFromBoxClicked();
+            
         }
     }
 }
