@@ -23,11 +23,6 @@ namespace Web_Server
             _serializer = new JavaScriptSerializer();
         }
 
-        public string[] Test()
-        {
-            return _client.Test();
-        }
-
         public string[] ListCities()
         {
             return _client.ListCities();

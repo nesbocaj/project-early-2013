@@ -16,6 +16,7 @@ namespace Web_Forms_Client.Presenter
         private static Presenter _instance = null;
         private WebClient _webClient;
         private string _baseUrl;
+        private string[] _cityList;
 
 
         private bool _okButtonState = true; 
@@ -44,8 +45,16 @@ namespace Web_Forms_Client.Presenter
             var arr = Main.ChosenCities();
             if (arr[0] == "" || arr[1] == "")
                 MessageBox.Show("Begge felter skal udfyldes.", "ERROR 43021", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //else
-                Overview.Show();
+            else
+            {
+                _webClient.DownloadStringCompleted += client_GetSearchListCompleted;
+
+                _webClient.DownloadStringAsync(
+                    new Uri(string.Format("{0}/search?From={1}&To={2}",
+                    _baseUrl, Main.FromBoxText, Main.ToBoxText)));
+                _instance.Overview = new View.Overview();
+                Overview.ShowDialog();
+            }
         }
 
         public void ChangeOverview()
@@ -64,30 +73,6 @@ namespace Web_Forms_Client.Presenter
         }
 
         //Jeg arbejder her. -Dennis-
-
-        public void Test()
-        {
-            _webClient.DownloadStringCompleted += client_TestCompleted;
-
-            _webClient.DownloadStringAsync(
-                new Uri(string.Format("{0}/test",
-                _baseUrl)));
-        }
-
-        private void client_TestCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
-            if (e.Error == null)
-            {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                string[] cList = js.Deserialize<string[]>(e.Result);
-
-                //string test = xmlResponse.Root.Value;
-                //Main.ShowCities(cList);
-            }
-            _webClient.DownloadStringCompleted -= client_TestCompleted;
-
-        }
-
         public void GetCityList()
         {
             _webClient.DownloadStringCompleted += client_GetCityListCompleted;
@@ -104,8 +89,9 @@ namespace Web_Forms_Client.Presenter
                 JavaScriptSerializer js = new JavaScriptSerializer();
                 string[] cList = js.Deserialize<string[]>(e.Result);
 
-                //string test = xmlResponse.Root.Value;
-                Main.ShowCities(cList);
+                _cityList = cList;
+                Main.PopulateFromBox(_cityList);
+
             }
             _webClient.DownloadStringCompleted -= client_GetCityListCompleted;
 
@@ -134,15 +120,6 @@ namespace Web_Forms_Client.Presenter
 
         }
 
-        public void GetSearchList(string from, string to)
-        {
-            _webClient.DownloadStringCompleted += client_GetSearchListCompleted;
-
-            _webClient.DownloadStringAsync(
-                new Uri(string.Format("{0}/search?From={1}&To={2}",
-                _baseUrl, from, to)));
-        }
-
         private void client_GetSearchListCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
             if (e.Error == null)
@@ -153,7 +130,10 @@ namespace Web_Forms_Client.Presenter
                 string[] sList = sTuple.Item1;
                 decimal sPrice = sTuple.Item2;
 
-                //Main.ShowCities(sList);
+                var description = String.Format("Din rejse:\n\n{0}", String.Join("\n\n", sList));
+
+                Overview.DescriptopnLabelText(description);
+                Overview.PriceLabelText(sPrice);
             }
 
             _webClient.DownloadStringCompleted -= client_GetSearchListCompleted;
@@ -181,6 +161,12 @@ namespace Web_Forms_Client.Presenter
 
             _webClient.DownloadStringCompleted -= client_GetWatchListCompleted;
 
+        }
+
+        public void PopulateToList()
+        {
+            string[] _filteredArray = _cityList.Where(x => x != Main.FromBoxText).ToArray();
+            Main.PopulateToBox(_filteredArray);
         }
 
         public class JsonTuple

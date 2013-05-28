@@ -28,29 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.DescriptionLabel = new System.Windows.Forms.Label();
+            this.PriceLabel = new System.Windows.Forms.Label();
             this.CancelButton = new System.Windows.Forms.Button();
             this.OkButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label1
+            // DescriptionLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
+            this.DescriptionLabel.AutoSize = true;
+            this.DescriptionLabel.Location = new System.Drawing.Point(13, 13);
+            this.DescriptionLabel.Name = "DescriptionLabel";
+            this.DescriptionLabel.Size = new System.Drawing.Size(35, 13);
+            this.DescriptionLabel.TabIndex = 0;
+            this.DescriptionLabel.Text = "label1";
             // 
-            // label2
+            // PriceLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(201, 13);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "label2";
+            this.PriceLabel.AutoSize = true;
+            this.PriceLabel.Location = new System.Drawing.Point(201, 13);
+            this.PriceLabel.Name = "PriceLabel";
+            this.PriceLabel.Size = new System.Drawing.Size(35, 13);
+            this.PriceLabel.TabIndex = 1;
+            this.PriceLabel.Text = "label2";
             // 
             // CancelButton
             // 
@@ -78,8 +78,8 @@
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.OkButton);
             this.Controls.Add(this.CancelButton);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.PriceLabel);
+            this.Controls.Add(this.DescriptionLabel);
             this.Name = "Overview";
             this.Text = "Overview";
             this.ResumeLayout(false);
@@ -89,8 +89,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label DescriptionLabel;
+        private System.Windows.Forms.Label PriceLabel;
         private System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.Button OkButton;
     }

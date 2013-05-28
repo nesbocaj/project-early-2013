@@ -16,11 +16,6 @@ namespace Internal_Server
             _graph = CityGraph.Instance;
         }
 
-        public string[] Test()
-        {
-            return _graph.TestSOAP();
-        }
-
         public string[] ListCities()
         {
             return _graph.Cities;

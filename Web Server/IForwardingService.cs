@@ -14,10 +14,6 @@ namespace Web_Server
     {
 
         [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/test")]
-        string[] Test();
-
-        [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/list/cities")]
         string[] ListCities();
 

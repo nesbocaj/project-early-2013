@@ -17,7 +17,6 @@ namespace Web_Forms_Client.View
         {
             InitializeComponent();
             _presenter = Presenter.Presenter.Getinstance();
-            //_presenter.GetSearchList();
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -35,9 +34,22 @@ namespace Web_Forms_Client.View
             CancelButton.Visible = visibility;
         }
 
-        private void OverView_FormClosing(object sender, FormClosingEventArgs e)
+        /// <summary>
+        /// Sets the text that will be displayed in the DescriptionLabel
+        /// </summary>
+        /// <param name="text"></param>
+        public void DescriptopnLabelText(string text)
         {
-            _presenter.Overview = new Overview();
+            DescriptionLabel.Text = text;
+        }
+
+        /// <summary>
+        /// Sets the text that will be displayed in the PriceLabel
+        /// </summary>
+        /// <param name="price"></param>
+        public void PriceLabelText(decimal price)
+        {
+            PriceLabel.Text = "Pris:\n\n" + price.ToString() + " kr.";
         }
     }
 }

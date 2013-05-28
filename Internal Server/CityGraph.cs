@@ -42,11 +42,7 @@ namespace Internal_Server
 		/// <summary>
 		/// Gets all the Citynames from the list
 		/// </summary>
-		/// 
-		public string[] TestSOAP()
-		{
-			return new string[]{"Accepted", "the", "string", "array"};
-		}
+		///
 
 		public string[] Cities
 		{

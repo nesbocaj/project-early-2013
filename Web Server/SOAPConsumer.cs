@@ -12,10 +12,6 @@ namespace Web_Server
 {
     public class SOAPConsumer : ClientBase<Internal_Server.ISOAPService>, Internal_Server.ISOAPService
     {
-        public string[] Test()
-        {
-            return base.Channel.Test();
-        }
 
         public string[] ListCities()
         {
