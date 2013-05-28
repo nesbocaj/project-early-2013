@@ -47,11 +47,6 @@ namespace Web_Forms_Client.Presenter
                 MessageBox.Show("Begge felter skal udfyldes.", "ERROR 43021", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                _webClient.DownloadStringCompleted += client_GetSearchListCompleted;
-
-                _webClient.DownloadStringAsync(
-                    new Uri(string.Format("{0}/search?From={1}&To={2}",
-                    _baseUrl, Main.FromBoxText, Main.ToBoxText)));
                 _instance.Overview = new View.Overview();
                 Overview.ShowDialog();
             }
@@ -118,6 +113,15 @@ namespace Web_Forms_Client.Presenter
 
             _webClient.DownloadStringCompleted -= client_GetDestinationListCompleted;
 
+        }
+
+        public void GetSearchList()
+        {
+            _webClient.DownloadStringCompleted += client_GetSearchListCompleted;
+
+            _webClient.DownloadStringAsync(
+                new Uri(string.Format("{0}/search?From={1}&To={2}",
+                _baseUrl, Main.FromBoxText, Main.ToBoxText)));
         }
 
         private void client_GetSearchListCompleted(object sender, DownloadStringCompletedEventArgs e)

@@ -51,5 +51,10 @@ namespace Web_Forms_Client.View
         {
             PriceLabel.Text = "Pris:\n\n" + price.ToString() + " kr.";
         }
+
+        private void Overview_Shown(object sender, EventArgs e)
+        {
+            _presenter.GetSearchList();
+        }
     }
 }

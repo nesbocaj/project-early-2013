@@ -82,6 +82,7 @@
             this.Controls.Add(this.DescriptionLabel);
             this.Name = "Overview";
             this.Text = "Overview";
+            this.Shown += new System.EventHandler(this.Overview_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
