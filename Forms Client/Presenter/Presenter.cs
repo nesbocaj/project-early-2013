@@ -14,6 +14,7 @@ namespace Forms_Client.Presenter
 {
     class Presenter
     {
+        // private variables
         private static Presenter _instance = null;
         private bool _okButtonState = true;
         private Proxy _prox = null;
@@ -21,6 +22,18 @@ namespace Forms_Client.Presenter
         private string[] _response = null;
         private string[] _filteredArray = null;
 
+        // public properties
+
+        /// <summary>
+        /// Saves an instance of the Overview Form
+        /// </summary>
+        public View.Overview_Form OverviewForm { get; set; }
+        /// <summary>
+        /// Saves an instance of the Main Form
+        /// </summary>
+        public View.MainWindow MainForm { get; set; }
+
+        // Constructor and instance accessor
 
         /// <summary>
         /// Creates a new instance of the Presenter and the Proxy
@@ -44,6 +57,8 @@ namespace Forms_Client.Presenter
 
             return _instance;
         }
+
+        // private methods
 
         /// <summary>
         /// Creates a BackgroundWorker that accesses the server in a different thread
@@ -79,13 +94,22 @@ namespace Forms_Client.Presenter
         }
 
         /// <summary>
-        /// Saves an instance of the Overview Form
+        /// Shows a messagebox with the exception
         /// </summary>
-        public View.Overview_Form OverviewForm { get; set; }
-        /// <summary>
-        /// Saves an instance of the Main Form
-        /// </summary>
-        public View.MainWindow MainForm { get; set; }
+        /// <typeparam name="T">Any given Exception</typeparam>
+        /// <param name="ex">An Exception of type T</param>
+        /// <param name="text">The Error Description</param>
+        /// <param name="title">The MessageBox Title</param>
+        private void ErrorMessage<T>(T ex, String text, String title) where T : Exception
+        {
+            MessageBox.Show(
+                text + ex.Message,
+                title,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+        }
+
+        // public methods
 
         /// <summary>
         /// Calls the overview if the Main Form's text comboboxes contain anything
@@ -176,22 +200,6 @@ namespace Forms_Client.Presenter
         {
             _filteredArray = _response.Where(x => x != MainForm.FromBoxText).ToArray();
             MainForm.PopulateToBox(_filteredArray);
-        }
-
-        /// <summary>
-        /// Shows a messagebox with the exception
-        /// </summary>
-        /// <typeparam name="T">Any given Exception</typeparam>
-        /// <param name="ex">An Exception of type T</param>
-        /// <param name="text">The Error Description</param>
-        /// <param name="title">The MessageBox Title</param>
-        private void ErrorMessage<T>(T ex, String text, String title) where T : Exception
-        {
-            MessageBox.Show(
-                text + ex.Message,
-                title,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
         }
     }
 }
