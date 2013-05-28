@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Net.Sockets;
+using System.ComponentModel;
+using System.Diagnostics;
+
 
 namespace Forms_Client.Presenter
 {
@@ -16,7 +19,7 @@ namespace Forms_Client.Presenter
         private Proxy _prox = null;
         private string _resultString = null;
         private string _flight = null;
-        private Thread _backgroundWorker = null;
+        private BackgroundWorker _backgroundWorker = null;
 
         private string[] _response = null;
         private string[] _filteredArray = null;
@@ -30,25 +33,15 @@ namespace Forms_Client.Presenter
         {
             _prox = new Proxy();
 
-            //_backgroundWorker = new Thread(() =>
-            //);
+            //_resultString = _prox.Request("list cities");
 
-            try 
-            {
-                _resultString = _prox.Request("list cities");
-
-            }
-            catch (SocketException se)
-            {
-                MessageBox.Show(
-                    "Kunne ikke hente by-listen fra serveren" +
-                    "\nprøv venligst igen senere\n" +
-                    "\nVis denne fejl til din nærmeste IT support: \n" + 
-                    se.Message, 
-                    "Fejl! Kunne ikke forbinde til serveren", 
-                    MessageBoxButtons.OK, 
-                    MessageBoxIcon.Warning);
-            }
+            ///*
+            _backgroundWorker = new BackgroundWorker();
+            _backgroundWorker.DoWork += new DoWorkEventHandler(DoWork);
+            _backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(WorkCompleted);
+            _backgroundWorker.RunWorkerAsync();
+            Debug.WriteLine("++ OUR RESULT STRING = "+ _resultString); // check to see if it contains anything after exiting the bg worker
+            //*/
         }
 
         /// <summary>
@@ -63,6 +56,24 @@ namespace Forms_Client.Presenter
             }
 
             return _instance;
+        }
+
+        private void DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                e.Result = _prox.Request("list cities");
+            }
+            catch (SocketException se)
+            {
+                ErrorMessage(se);
+            }
+        }
+
+        private void WorkCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            _resultString = e.Result as string;
+            Debug.WriteLine("-- OUR RESULT STRING = " + _resultString);
         }
 
         /// <summary>
@@ -146,6 +157,23 @@ namespace Forms_Client.Presenter
         {
             _filteredArray = _response.Where(x => x != MainForm.FromBoxText).ToArray();
             MainForm.PopulateToBox(_filteredArray);
+        }
+
+        public void ErrorMessage(SocketException se)
+        {
+            MessageBox.Show(
+                "Kunne ikke hente by-listen fra serveren" +
+                "\nprøv venligst igen senere\n" +
+                "\nVis denne fejl til din nærmeste IT support: \n" +
+                se.Message,
+                "Fejl! Kunne ikke forbinde til serveren",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+        }
+
+        public void OnFromBoxClicked()
+        {
+            PopulateFromList();
         }
     }
 }

@@ -50,6 +50,7 @@
     <Compile Include="Presenter\Cities.cs" />
     <Compile Include="Presenter\Presenter.cs" />
     <Compile Include="Proxy.cs" />
+    <Compile Include="ThreadWithHandler.cs" />
     <Compile Include="View\Main Window.cs">
       <SubType>Form</SubType>
     </Compile>

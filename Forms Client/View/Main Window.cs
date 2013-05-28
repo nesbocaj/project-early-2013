@@ -23,7 +23,7 @@ namespace Forms_Client.View
             InitializeComponent();
             _presenter = Presenter.Presenter.GetInstance();
             _presenter.MainForm = this;
-            _presenter.PopulateFromList();
+            //_presenter.PopulateFromList();
         }
 
         /// <summary>
@@ -112,6 +112,12 @@ namespace Forms_Client.View
         private void FromBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             _presenter.PopulateToList();
+        }
+
+        private void FromBox_Click(object sender, EventArgs e)
+        {
+            FromBox.Items.Clear();
+            _presenter.OnFromBoxClicked();
         }
     }
 }

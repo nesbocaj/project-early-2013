@@ -62,6 +62,7 @@
             this.FromBox.Size = new System.Drawing.Size(260, 21);
             this.FromBox.TabIndex = 2;
             this.FromBox.SelectedIndexChanged += new System.EventHandler(this.FromBox_SelectedIndexChanged);
+            this.FromBox.Click += new System.EventHandler(this.FromBox_Click);
             // 
             // ToBox
             // 
