@@ -164,6 +164,23 @@ namespace Forms_Client.Presenter
                 var item1 = response.Value.Item1;
 
                 var price = response.Value.Item2;
+
+                // adding some additional info to the description... messy solution at best...
+                item1[0] = "Udrejse: " + item1[0];
+                item1[item1.Length - 1] = "Destination: " + item1[item1.Length - 1];
+
+                for (int i = 1; i <= item1.Length - 2; i++)
+                {
+                    if (item1.Length - 2 <= 0)// if the array's size doesn't work in its favour
+                    {
+                        // do nothing
+                    }
+                    else // otherwise if it does
+                    {
+                        item1[i] = "Viapunkt: " + item1[i];
+                    }
+                }
+
                 var description = String.Format("Din rejse:\n\n{0}", String.Join("\n\n", item1));
 
                 OverviewForm.DescriptopnLabelText(description);
