@@ -122,6 +122,12 @@ namespace Forms_Client.Presenter
         {
             var request = String.Format("search flights {0} {1}", MainForm.FromBoxText, MainForm.ToBoxText);
 
+            var message = "Kunne ikke beregne din rejse" +
+                "\nprøv venligst igen senere\n" +
+                "\nVis denne fejl til din nærmeste IT support: \n";
+
+            var title = "Fejl! Kunne ikke beregne rejse!";
+
             TransmitToServer(request, flight =>
             {
                 var response = TCP_Shared.Response<Tuple<String[], Decimal>>.FromSerialized(flight);
@@ -133,7 +139,7 @@ namespace Forms_Client.Presenter
 
                 OverviewForm.DescriptopnLabelText(description);
                 OverviewForm.PriceLabelText(price);
-            }, null);
+            }, se => ErrorMessage(se, message + se.Message, title));
         }
 
         /// <summary>
@@ -141,6 +147,12 @@ namespace Forms_Client.Presenter
         /// </summary>
         public void PopulateFromList()
         {
+            var message = "Kunne ikke hente by-listen fra serveren" +
+                "\nprøv venligst igen senere\n" +
+                "\nVis denne fejl til din nærmeste IT support: \n";
+
+            var title = "Fejl! Kunne ikke forbinde til serveren";
+
             TransmitToServer("list cities", res =>
             {
                 if (!String.IsNullOrEmpty(res))
@@ -149,8 +161,7 @@ namespace Forms_Client.Presenter
                     _response = responseString.Value;
                     MainForm.PopulateFromBox(_response);
                 }
-            }, 
-            null);
+            }, se => ErrorMessage(se, message + se.Message, title));
         }
 
         /// <summary>
@@ -162,14 +173,11 @@ namespace Forms_Client.Presenter
             MainForm.PopulateToBox(_filteredArray);
         }
 
-        public void ErrorMessage(SocketException se)
+        public void ErrorMessage(SocketException se, String text, String title)
         {
             MessageBox.Show(
-                "Kunne ikke hente by-listen fra serveren" +
-                "\nprøv venligst igen senere\n" +
-                "\nVis denne fejl til din nærmeste IT support: \n" +
-                se.Message,
-                "Fejl! Kunne ikke forbinde til serveren",
+                text,
+                title,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Warning);
         }
