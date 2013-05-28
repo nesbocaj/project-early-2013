@@ -45,7 +45,13 @@ namespace Forms_Client.Presenter
             return _instance;
         }
 
-        private void TransmitToServer(string command, Action<string> act ,Action<SocketException> handler)
+        /// <summary>
+        /// Creates a BackgroundWorker that accesses the server in a different thread
+        /// </summary>
+        /// <param name="command">The command to be sent to the server</param>
+        /// <param name="act">The code to be exectuted on completion</param>
+        /// <param name="handler">The built-in ExceptionHandler</param>
+        private void TransmitToServer(string command, Action<string> act, Action<SocketException> handler)
         {
             var backgroundWorker = new BackgroundWorker();
             var resultString = "";
@@ -114,7 +120,6 @@ namespace Forms_Client.Presenter
             }
         }
 
-
         /// <summary>
         /// Populates all the labels in the Overview Form
         /// </summary>
@@ -139,7 +144,7 @@ namespace Forms_Client.Presenter
 
                 OverviewForm.DescriptopnLabelText(description);
                 OverviewForm.PriceLabelText(price);
-            }, se => ErrorMessage(se, message + se.Message, title));
+            }, se => ErrorMessage(se, message, title));
         }
 
         /// <summary>
@@ -161,7 +166,7 @@ namespace Forms_Client.Presenter
                     _response = responseString.Value;
                     MainForm.PopulateFromBox(_response);
                 }
-            }, se => ErrorMessage(se, message + se.Message, title));
+            }, se => ErrorMessage(se, message, title));
         }
 
         /// <summary>
@@ -173,10 +178,17 @@ namespace Forms_Client.Presenter
             MainForm.PopulateToBox(_filteredArray);
         }
 
-        public void ErrorMessage(SocketException se, String text, String title)
+        /// <summary>
+        /// Shows a messagebox with the exception
+        /// </summary>
+        /// <typeparam name="T">Any given Exception</typeparam>
+        /// <param name="ex">An Exception of type T</param>
+        /// <param name="text">The Error Description</param>
+        /// <param name="title">The MessageBox Title</param>
+        private void ErrorMessage<T>(T ex, String text, String title) where T : Exception
         {
             MessageBox.Show(
-                text,
+                text + ex.Message,
                 title,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Warning);

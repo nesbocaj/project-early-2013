@@ -11,15 +11,22 @@ using TCP_Shared;
 
 namespace Forms_Client
 {
+    /// <summary>
+    /// Represents the bit that connects to the server
+    /// </summary>
     class Proxy : ITcpConnection
     {
-        private List<String> _cityList = null;
+        /// <summary>
+        /// Constructs an instance of the proxy
+        /// </summary>
+        public Proxy() { }
 
-        public Proxy()
-        {
-            _cityList = new List<string>();
-        }
-
+        /// <summary>
+        /// Handles a client request to the server, 
+        /// using "command" as the input message, which determines its behavior
+        /// </summary>
+        /// <param name="command">The command specified</param>
+        /// <returns>An encrypted string</returns>
         public string Request(string command)
         {
             var tcp = new TcpClient();

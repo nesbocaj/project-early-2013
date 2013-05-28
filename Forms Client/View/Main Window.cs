@@ -21,10 +21,16 @@ namespace Forms_Client.View
         public MainWindow()
         {
             InitializeComponent();
+            FromBox.Enabled = ToBox.Enabled = OKButton.Enabled = false;
             _presenter = Presenter.Presenter.GetInstance();
             _presenter.MainForm = this;
         }
 
+        /// <summary>
+        /// Populates the dropdown menu once the form has loaded
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainWindow_Shown(object sender, EventArgs e)
         {
             FromBox.Items.Clear();
@@ -81,6 +87,7 @@ namespace Forms_Client.View
         {
             ToBox.Items.Clear();
             FromBox.Items.AddRange(items);
+            FromBox.Enabled = true;
         }
 
         /// <summary>
@@ -117,11 +124,17 @@ namespace Forms_Client.View
         private void FromBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             _presenter.PopulateToList();
+            ToBox.Enabled = true;
         }
 
-        private void FromBox_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Enables the OK button once something has been selected
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ToBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            OKButton.Enabled = true;
         }
     }
 }

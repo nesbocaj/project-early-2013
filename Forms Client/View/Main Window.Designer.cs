@@ -56,21 +56,23 @@
             // 
             // FromBox
             // 
+            this.FromBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.FromBox.FormattingEnabled = true;
             this.FromBox.Location = new System.Drawing.Point(12, 25);
             this.FromBox.Name = "FromBox";
             this.FromBox.Size = new System.Drawing.Size(260, 21);
             this.FromBox.TabIndex = 2;
             this.FromBox.SelectedIndexChanged += new System.EventHandler(this.FromBox_SelectedIndexChanged);
-            this.FromBox.Click += new System.EventHandler(this.FromBox_Click);
             // 
             // ToBox
             // 
+            this.ToBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ToBox.FormattingEnabled = true;
             this.ToBox.Location = new System.Drawing.Point(12, 65);
             this.ToBox.Name = "ToBox";
             this.ToBox.Size = new System.Drawing.Size(260, 21);
             this.ToBox.TabIndex = 3;
+            this.ToBox.SelectedIndexChanged += new System.EventHandler(this.ToBox_SelectedIndexChanged);
             // 
             // OKButton
             // 
@@ -88,7 +90,7 @@
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(75, 23);
             this.CancelButton.TabIndex = 5;
-            this.CancelButton.Text = "Cancel";
+            this.CancelButton.Text = "Annullér";
             this.CancelButton.UseVisualStyleBackColor = true;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
