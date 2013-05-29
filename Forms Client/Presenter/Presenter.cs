@@ -14,27 +14,16 @@ namespace Forms_Client.Presenter
 {
     class Presenter
     {
-        // private variables
+        #region private variables
         private static Presenter _instance = null;
         private bool _okButtonState = true;
         private Proxy _prox = null;
 
         private string[] _response = null;
         private string[] _filteredArray = null;
+        #endregion
 
-        // public properties
-
-        /// <summary>
-        /// Saves an instance of the Overview Form
-        /// </summary>
-        public View.Overview_Form OverviewForm { get; set; }
-        /// <summary>
-        /// Saves an instance of the Main Form
-        /// </summary>
-        public View.MainWindow MainForm { get; set; }
-
-        // Constructor and instance accessor
-
+        #region Constructor and instance accessor
         /// <summary>
         /// Creates a new instance of the Presenter and the Proxy
         /// Then sends a request to the Proxy
@@ -57,8 +46,24 @@ namespace Forms_Client.Presenter
 
             return _instance;
         }
+        #endregion
 
-        // private methods
+        #region public properties
+        /// <summary>
+        /// Saves an instance of the Overview Form
+        /// </summary>
+        public View.IOverwiewWindow OverviewWindow { get; set; }
+        //public View.Overview_Form OverviewWindow { get; set; }
+
+
+        /// <summary>
+        /// Saves an instance of the Main Form
+        /// </summary>
+        public View.IMainWindow MainForm { get; set; }
+        //public View.MainWindow MainForm { get; set; }
+        #endregion
+
+        #region private methods
 
         /// <summary>
         /// Creates a BackgroundWorker that accesses the server in a different thread
@@ -82,6 +87,7 @@ namespace Forms_Client.Presenter
                     handler(se);
                 }
             };
+
             Action<object, RunWorkerCompletedEventArgs> runWorkerCompleted = (sender, e) =>
             {
                 resultString = e.Result as string;
@@ -108,8 +114,9 @@ namespace Forms_Client.Presenter
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Warning);
         }
+        #endregion
 
-        // public methods
+        #region public methods
 
         /// <summary>
         /// Calls the overview if the Main Form's text comboboxes contain anything
@@ -121,8 +128,8 @@ namespace Forms_Client.Presenter
                 MessageBox.Show("Du mangler at udfylde felterne", "FEJL!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                _instance.OverviewForm = new View.Overview_Form();
-                OverviewForm.ShowDialog();
+                _instance.OverviewWindow = new View.Overview_Form();
+                OverviewWindow.ShowDialog();
             }
         }
 
@@ -133,13 +140,13 @@ namespace Forms_Client.Presenter
         {
             if (_okButtonState == true)
             {
-                OverviewForm.SetCancelButtonVisibility(false);
+                OverviewWindow.SetCancelButtonVisibility(false);
                 _okButtonState = false;
             }
             else
             {
-                OverviewForm.Close();
-                OverviewForm.SetCancelButtonVisibility(true);
+                OverviewWindow.Close();
+                OverviewWindow.SetCancelButtonVisibility(true);
                 _okButtonState = true;
             }
         }
@@ -183,8 +190,8 @@ namespace Forms_Client.Presenter
 
                 var description = String.Format("Din rejse:\n\n{0}", String.Join("\n\n", item1));
 
-                OverviewForm.DescriptopnLabelText(description);
-                OverviewForm.PriceLabelText(price);
+                OverviewWindow.DescriptopnLabelText(description);
+                OverviewWindow.PriceLabelText(price);
             }, se => ErrorMessage(se, message, title));
         }
 
@@ -218,5 +225,6 @@ namespace Forms_Client.Presenter
             _filteredArray = _response.Where(x => x != MainForm.FromBoxText).ToArray();
             MainForm.PopulateToBox(_filteredArray);
         }
+        #endregion
     }
 }

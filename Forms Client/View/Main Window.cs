@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Forms_Client.View
 {
-    public partial class MainWindow : Form
+    public partial class MainWindow : Form, IMainWindow
     {
         private readonly Presenter.Presenter _presenter = null;
 
@@ -55,6 +55,27 @@ namespace Forms_Client.View
         private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        /// <summary>
+        /// Updates the ToBox Combobox whenever the FromBox Combobox's selection changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FromBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _presenter.PopulateToList();
+            ToBox.Enabled = true;
+        }
+
+        /// <summary>
+        /// Enables the OK button once something has been selected
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ToBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OKButton.Enabled = true;
         }
 
         /// <summary>
@@ -116,25 +137,5 @@ namespace Forms_Client.View
             get { return ToBox.Text; }
         }
 
-        /// <summary>
-        /// Updates the ToBox Combobox whenever the FromBox Combobox's selection changes
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void FromBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _presenter.PopulateToList();
-            ToBox.Enabled = true;
-        }
-
-        /// <summary>
-        /// Enables the OK button once something has been selected
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ToBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            OKButton.Enabled = true;
-        }
     }
 }

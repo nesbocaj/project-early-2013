@@ -44,10 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IMainWindow.cs" />
-    <Compile Include="IOverwiewForm.cs" />
+    <Compile Include="View\IMainWindow.cs" />
+    <Compile Include="View\IOverwiewForm.cs" />
     <Compile Include="Model\Travel.cs" />
-    <Compile Include="Presenter\Cities.cs" />
     <Compile Include="Presenter\Presenter.cs" />
     <Compile Include="Proxy.cs" />
     <Compile Include="View\Main Window.cs">

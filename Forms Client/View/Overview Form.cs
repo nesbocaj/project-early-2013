@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Forms_Client.View
 {
-    public partial class Overview_Form : Form
+    public partial class Overview_Form : Form, IOverwiewWindow
     {
         private Presenter.Presenter _presenter = null;
 
@@ -41,7 +41,7 @@ namespace Forms_Client.View
         /// <param name="e"></param>
         private void CancelButton_Click(object sender, EventArgs e)
         {
-            this.Close();
+            base.Close();
         }
 
         /// <summary>
@@ -80,6 +80,5 @@ namespace Forms_Client.View
         {
             PriceLabel.Text = "Pris:\n\n" + price.ToString() +" kr.";
         }
-
     }
 }
