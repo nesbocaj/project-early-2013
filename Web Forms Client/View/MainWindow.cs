@@ -13,9 +13,11 @@ namespace Web_Forms_Client
     public partial class MainWindow : Form
     {
         private readonly Presenter.Presenter _presenter = null;
+
         public MainWindow()
         {
             InitializeComponent();
+            FromBox.Enabled = ToBox.Enabled = OKButton.Enabled = false;
             _presenter = Presenter.Presenter.Getinstance();
             _presenter.Main = this;
             _presenter.GetCityList();
@@ -30,6 +32,7 @@ namespace Web_Forms_Client
         {
             ToBox.Items.Clear();
             FromBox.Items.AddRange(items);
+            FromBox.Enabled = true;
         }
 
         /// <summary>
@@ -81,6 +84,12 @@ namespace Web_Forms_Client
         private void FromBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             _presenter.PopulateToList();
+            ToBox.Enabled = true;
+        }
+
+        private void ToBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OKButton.Enabled = true;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.ServiceModel.Web;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,8 +18,6 @@ namespace Web_Forms_Client.Presenter
         private WebClient _webClient;
         private string _baseUrl;
         private string[] _cityList;
-
-
         private bool _okButtonState = true; 
 
         private Presenter()
@@ -81,15 +80,13 @@ namespace Web_Forms_Client.Presenter
         {
             if (e.Error == null)
             {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                string[] cList = js.Deserialize<string[]>(e.Result);
+                var json = new DataContractJsonSerializer(typeof(string[]));
+                _cityList = json.ReadObject(new MemoryStream(Encoding.Default.GetBytes(e.Result))) as string[];
 
-                _cityList = cList;
                 Main.PopulateFromBox(_cityList);
-
             }
-            _webClient.DownloadStringCompleted -= client_GetCityListCompleted;
 
+            _webClient.DownloadStringCompleted -= client_GetCityListCompleted;
         }
 
         public void GetDestinationList(string from)
@@ -105,14 +102,13 @@ namespace Web_Forms_Client.Presenter
         {
             if (e.Error == null)
             {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                string[] dList = js.Deserialize<string[]>(e.Result);
+                var json = new DataContractJsonSerializer(typeof(string[]));
+                var dList = json.ReadObject(new MemoryStream(Encoding.Default.GetBytes(e.Result))) as string[];
 
                 //Main.ShowCities(dList);
             }
 
             _webClient.DownloadStringCompleted -= client_GetDestinationListCompleted;
-
         }
 
         public void GetSearchList()
@@ -128,11 +124,11 @@ namespace Web_Forms_Client.Presenter
         {
             if (e.Error == null)
             {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                JsonTuple sTuple = js.Deserialize<JsonTuple>(e.Result);
+                var json = new DataContractJsonSerializer(typeof(Tuple<string[], decimal>));
+                var sTuple = json.ReadObject(new MemoryStream(Encoding.Default.GetBytes(e.Result))) as Tuple<string[], decimal>;
 
-                string[] sList = sTuple.Item1;
-                decimal sPrice = sTuple.Item2;
+                var sList = sTuple.Item1;
+                var sPrice = sTuple.Item2;
 
                 var description = String.Format("Din rejse:\n\n{0}", String.Join("\n\n", sList));
 
@@ -141,7 +137,6 @@ namespace Web_Forms_Client.Presenter
             }
 
             _webClient.DownloadStringCompleted -= client_GetSearchListCompleted;
-
         }
 
         public void GetWatchList(string from, string to)
@@ -157,26 +152,19 @@ namespace Web_Forms_Client.Presenter
         {
             if (e.Error == null)
             {
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                string[] wList = js.Deserialize<string[]>(e.Result);
+                var json = new DataContractJsonSerializer(typeof(string[]));
+                var dList = json.ReadObject(new MemoryStream(Encoding.Default.GetBytes(e.Result))) as string[];
 
                 //Main.ShowCities(wList);
             }
 
             _webClient.DownloadStringCompleted -= client_GetWatchListCompleted;
-
         }
 
         public void PopulateToList()
         {
             string[] _filteredArray = _cityList.Where(x => x != Main.FromBoxText).ToArray();
             Main.PopulateToBox(_filteredArray);
-        }
-
-        public class JsonTuple
-        {
-            public string[] Item1 { get; set; }
-            public decimal Item2 { get; set; }
         }
     }
 }

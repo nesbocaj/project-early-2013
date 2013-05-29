@@ -58,20 +58,23 @@
             // 
             // FromBox
             // 
+            this.FromBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.FromBox.FormattingEnabled = true;
             this.FromBox.Location = new System.Drawing.Point(13, 45);
             this.FromBox.Name = "FromBox";
-            this.FromBox.Size = new System.Drawing.Size(217, 21);
+            this.FromBox.Size = new System.Drawing.Size(236, 21);
             this.FromBox.TabIndex = 2;
             this.FromBox.SelectedIndexChanged += new System.EventHandler(this.FromBox_SelectedIndexChanged);
             // 
             // ToBox
             // 
+            this.ToBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ToBox.FormattingEnabled = true;
             this.ToBox.Location = new System.Drawing.Point(13, 103);
             this.ToBox.Name = "ToBox";
-            this.ToBox.Size = new System.Drawing.Size(217, 21);
+            this.ToBox.Size = new System.Drawing.Size(236, 21);
             this.ToBox.TabIndex = 3;
+            this.ToBox.SelectedIndexChanged += new System.EventHandler(this.ToBox_SelectedIndexChanged);
             // 
             // label1
             // 

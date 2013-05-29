@@ -10,8 +10,6 @@ using System.Web.Script.Serialization;
 
 namespace Web_Server
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "ForwardingService" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select ForwardingService.svc or ForwardingService.svc.cs at the Solution Explorer and start debugging.
     public class ForwardingService : IForwardingService
     {
         private SOAPConsumer _client;
@@ -20,7 +18,6 @@ namespace Web_Server
         public ForwardingService()
         {
             _client = new SOAPConsumer();
-            _serializer = new JavaScriptSerializer();
         }
 
         public string[] ListCities()
@@ -33,15 +30,9 @@ namespace Web_Server
             return _client.ListDestinations(from);
         }
 
-        public JsonTuple SearchFlight(string from, string to)
+        public Tuple<string[], decimal> SearchFlight(string from, string to)
         {
-            Tuple<string[], decimal> temp = _client.SearchFlight(from, to);
-
-            JsonTuple searchTuple = new JsonTuple();
-            searchTuple.Item1 = temp.Item1;
-            searchTuple.Item2 = temp.Item2;
-
-            return searchTuple;
+            return _client.SearchFlight(from, to);
         }
 
         public void WatchFlight(string from, string to)
