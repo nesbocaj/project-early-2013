@@ -47,8 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="View\IOverview.cs" />
+    <Compile Include="View\IMainWindow.cs" />
     <Compile Include="Model\Travel.cs" />
-    <Compile Include="Presenter\Cities.cs" />
     <Compile Include="Presenter\Presenter.cs" />
     <Compile Include="View\MainWindow.cs">
       <SubType>Form</SubType>

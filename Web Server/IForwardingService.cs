@@ -11,7 +11,9 @@ namespace Web_Server
     [ServiceContract]
     public interface IForwardingService
     {
-
+        ///<summary>
+        /// //Receives Url endpoint address to call specific methods and returns with Json encoding.
+        /// </summary>
         [OperationContract]
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/list/cities")]
         string[] ListCities();
