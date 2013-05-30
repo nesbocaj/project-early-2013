@@ -104,6 +104,18 @@ namespace Internal_Server
 
 			Debug.WriteLine("");
 		}
+
+		public void RandomlyRemoveEdges()
+		{
+			var indexA = _randomizer.Next(0, _vertices.Count - 1);
+			var waypointA = _vertices[indexA];
+
+			var indexB = _randomizer.Next(0, waypointA.Edges.Count - 1);
+			var waypointB = waypointA.Edges[indexB].Endpoint;
+
+			RemoveEdges(waypointA.CityName, waypointB.CityName);
+		}
+
 		/// <summary>
 		/// Removes the edge between Waypoint A and B
 		/// </summary>
@@ -284,8 +296,21 @@ namespace Internal_Server
 			return new Tuple<string[], decimal>(waypoints, totalPrice);
 		}
 
+		public Tuple<string, string, decimal> ApplyDiscountRandomly()
+		{
+			var indexA = _randomizer.Next(0, _vertices.Count - 1);
+			var waypointA = _vertices[indexA];
 
-		public void ApplyDiscount(string waypointA, string waypointB)
+			var indexB = _randomizer.Next(0, waypointA.Edges.Count - 1);
+			var waypointB = waypointA.Edges[indexB].Endpoint;
+
+			var price = ApplyDiscount(waypointA.CityName, waypointB.CityName);
+
+			return new Tuple<string, string, decimal>(
+				waypointA.CityName, waypointB.CityName, price);
+		}
+
+		public decimal ApplyDiscount(string waypointA, string waypointB)
 		{
 			Debug.WriteLine("CityGraph.ApplyDiscount");
 
@@ -309,6 +334,8 @@ namespace Internal_Server
 			vertexB.Edges.Single(e => e.Endpoint.Equals(vertexA)).Price = price;
 
 			Debug.WriteLine("");
+
+			return price;
 		}
 
 

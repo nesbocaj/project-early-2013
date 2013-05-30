@@ -16,6 +16,7 @@ namespace Internal_Server
     class TcpConnection : ITcpConnection
     {
         private static TcpConnection _instance;
+        private List<Socket> _clients;
         private CityGraph _graph;
 
         /// <summary>
@@ -23,6 +24,7 @@ namespace Internal_Server
         /// </summary>
         private TcpConnection()
         {
+            _clients = new List<Socket>();
             _graph = CityGraph.Instance;
         }
 
@@ -40,6 +42,14 @@ namespace Internal_Server
         }
 
         /// <summary>
+        /// Gets the list of clients
+        /// </summary>
+        public List<Socket> Clients
+        {
+            get { return _clients; }
+        }
+
+        /// <summary>
         /// Manages the TCP client request
         /// </summary>
         /// <param name="currentSocket">The socket the client is connected to</param>
@@ -47,12 +57,15 @@ namespace Internal_Server
         {
             var stream = new NetworkStream(currentSocket);
             var reader = new BinaryReader(stream);
-            var writer = new BinaryWriter(stream);
 
             try
             {
-                string command = reader.ReadString();
-                writer.Write(Request(command));
+                var command = reader.ReadString();
+
+                if (command.Contains("watch"))
+                    _clients.Add(currentSocket);
+                else
+                    Post(Request(command), currentSocket);
             }
             catch (Exception ex)
             {
@@ -62,14 +75,6 @@ namespace Internal_Server
 
             stream.Close();
         }
-
-        /*
-         * help
-         * list cities
-         * list destinations
-         * search flights <initial city> <destination city>
-         * watch flight <waypoint cities, ...>
-         */
 
         /// <summary>
         /// Handles a client request based on the specified command
@@ -128,16 +133,12 @@ namespace Internal_Server
                     serialized = SearchFlights(parsed[1], parsed[2]).Serialize();
                     break;
                 }
-                case "watch":
-                {
-                    break;
-                }
                 default:
                 {
                     var response = new Response<object>(
-                            "502 COMMAND NOT IMPLEMENTED",
-                            string.Format("Could not {0}", command),
-                            false);
+                        "502 COMMAND NOT IMPLEMENTED",
+                        string.Format("Could not {0}", command),
+                        false);
                     Console.WriteLine(response);
                     serialized = response.Serialize();
 
@@ -146,6 +147,28 @@ namespace Internal_Server
             }
 
             return serialized;
+        }
+
+        /// <summary>
+        /// Sends the serialized response to all the clients in List&lt;Socket&gt; _clients
+        /// </summary>
+        /// <param name="serialized">A serialized TCP_Shared.Response&lt;T&gt;</param>
+        public void Broadcast(string serialized)
+        {
+            foreach (var client in _clients)
+                Post(serialized, client);
+        }
+
+        /// <summary>
+        /// Sends the serialized response to all the specified client
+        /// </summary>
+        /// <param name="serialized">A serialized TCP_Shared.Response&lt;T&gt;</param>
+        /// <param name="client">A socket</param>
+        private void Post(string serialized, Socket client)
+        {
+            var stream = new NetworkStream(client);
+            var writer = new BinaryWriter(stream);
+            writer.Write(serialized);
         }
 
         /// <summary>
@@ -160,7 +183,7 @@ namespace Internal_Server
                     "list cities",
                     "list destinations <initial city>",
                     "search flights <initial city> <destination city>",
-                    "watch flight <waypoint cities, ...>"
+                    "watch"
                 },
                 "200 OK",
                 "The following commands are available");
@@ -212,11 +235,6 @@ namespace Internal_Server
                     "400 BAD REQUEST",
                     String.Format("Could not find a path between {0} and {1}", initial, destination),
                     false);
-        }
-
-        private void WatchFlight(string[] arguments)
-        {
-            
         }
 
         /// <summary>

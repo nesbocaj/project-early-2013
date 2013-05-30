@@ -18,6 +18,7 @@ namespace Internal_Server
     {
         private TcpConnection _connection;
         private CityGraph _graph;
+        private Thread _discountWorker, _removeWorker;
 
         private Program()
         {
@@ -32,6 +33,14 @@ namespace Internal_Server
             var listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 7000);
             listener.Start();
             EndPoint remote = null;
+
+            _discountWorker = new Thread(() => ApplyDiscounts());
+            _discountWorker.Name = "Discount Worker";
+            _discountWorker.Start();
+
+            _removeWorker = new Thread(() => ApplyDiscounts());
+            _removeWorker.Name = "Remove Worker";
+            _removeWorker.Start();
 
             while (true)
             {
@@ -63,7 +72,7 @@ namespace Internal_Server
             new Program();
         }
 
-        public void GraphInit()
+        private void GraphInit()
         {
             _graph = CityGraph.Instance;
             _graph.InsertVertex(
@@ -82,6 +91,43 @@ namespace Internal_Server
             _graph.RemoveEdges("Tirana", "Sarajevo");
             var result = _graph.FindCheapestPath("Tirana", "Nicosia");
             var result2 = _graph.FindCheapestPath("Tirana", "Sofia");
+        }
+
+        /// <summary>
+        /// Applies discount to edges randomly every minute
+        /// </summary>
+        private void ApplyDiscounts()
+        {
+            Thread.Sleep(1000 * 60);
+
+            while (true)
+            {
+                var result = _graph.ApplyDiscountRandomly();
+
+                var response = new Response<Tuple<string, string, decimal>>(
+                    result,
+                    "200 OK",
+                    "");
+
+                var serialized = response.Serialize();
+                _connection.Broadcast(serialized);
+
+                Thread.Sleep(1000 * 60);
+            }
+        }
+
+        /// <summary>
+        /// Removes edges randomly every minute
+        /// </summary>
+        private void RemoveEdges()
+        {
+            Thread.Sleep(1000 * 60);
+
+            while (true)
+            {
+                _graph.ApplyDiscountRandomly();
+                Thread.Sleep(1000 * 60);
+            }
         }
     }
 }
