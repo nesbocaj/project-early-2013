@@ -52,19 +52,16 @@ namespace Forms_Client.Presenter
         /// <summary>
         /// Saves an instance of the Overview Form
         /// </summary>
-        public View.IOverwiewWindow OverviewWindow { get; set; }
-        //public View.Overview_Form OverviewWindow { get; set; }
+        public View.IOverviewWindow OverviewWindow { get; set; }
 
 
         /// <summary>
         /// Saves an instance of the Main Form
         /// </summary>
         public View.IMainWindow MainForm { get; set; }
-        //public View.MainWindow MainForm { get; set; }
         #endregion
 
         #region private methods
-
         /// <summary>
         /// Creates a BackgroundWorker that accesses the server in a different thread
         /// </summary>
@@ -128,7 +125,7 @@ namespace Forms_Client.Presenter
                 MessageBox.Show("Du mangler at udfylde felterne", "FEJL!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
-                _instance.OverviewWindow = new View.Overview_Form();
+                _instance.OverviewWindow = new View.OverviewWindow();
                 OverviewWindow.ShowDialog();
             }
         }
@@ -206,11 +203,11 @@ namespace Forms_Client.Presenter
 
             var title = "Fejl! Kunne ikke forbinde til serveren";
 
-            TransmitToServer("list cities", res =>
+            TransmitToServer("list cities", result =>
             {
-                if (!String.IsNullOrEmpty(res))
+                if (!String.IsNullOrEmpty(result))
                 {
-                    var responseString = TCP_Shared.Response<String[]>.FromSerialized(res);
+                    var responseString = TCP_Shared.Response<String[]>.FromSerialized(result);
                     _response = responseString.Value;
                     MainForm.PopulateFromBox(_response);
                 }

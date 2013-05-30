@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Forms_Client.View
 {
-    public interface IOverwiewWindow
+    public interface IOverviewWindow
     {
         void SetCancelButtonVisibility(bool visibility);
         void DescriptopnLabelText(string text);

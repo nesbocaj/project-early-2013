@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Forms_Client.View
 {
-    public partial class Overview_Form : Form, IOverwiewWindow
+    public partial class OverviewWindow : Form, IOverviewWindow
     {
         private Presenter.Presenter _presenter = null;
 
@@ -18,7 +18,7 @@ namespace Forms_Client.View
         /// Initializes a new instance of the Overview Form
         /// and gets the instance of the Presenter.Presenter class
         /// </summary>
-        public Overview_Form()
+        public OverviewWindow()
         {
             InitializeComponent();
             _presenter = Presenter.Presenter.GetInstance();

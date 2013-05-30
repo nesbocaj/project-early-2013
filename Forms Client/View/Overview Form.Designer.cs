@@ -1,6 +1,6 @@
 ﻿namespace Forms_Client.View
 {
-    partial class Overview_Form
+    partial class OverviewWindow
     {
         /// <summary>
         /// Required designer variable.
