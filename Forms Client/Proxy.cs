@@ -21,6 +21,10 @@ namespace Forms_Client
         /// </summary>
         public Proxy() { }
 
+        public bool ObserverState { get; set; }
+
+        public string ObserverResult { get; set; }
+
         /// <summary>
         /// Handles a client request to the server, 
         /// using "command" as the input message, which determines its behavior
@@ -32,6 +36,7 @@ namespace Forms_Client
             var tcp = new TcpClient();
             string txt = "";
             SocketException ex = null;
+
             for (int i = 0; i < 10 && !tcp.Connected; i++)
             {
                 try
@@ -46,6 +51,7 @@ namespace Forms_Client
                 }
                 
             }
+
             if (tcp.Connected)
             {
                 var stream = tcp.GetStream();
@@ -59,5 +65,10 @@ namespace Forms_Client
 
             return txt;
         }
+
+        public void Post(string command)
+        {
+
+        } 
     }
 }

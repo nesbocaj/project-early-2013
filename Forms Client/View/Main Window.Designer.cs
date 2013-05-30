@@ -34,6 +34,9 @@
             this.ToBox = new System.Windows.Forms.ComboBox();
             this.OKButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.SalesListView = new System.Windows.Forms.ListView();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -76,7 +79,7 @@
             // 
             // OKButton
             // 
-            this.OKButton.Location = new System.Drawing.Point(197, 150);
+            this.OKButton.Location = new System.Drawing.Point(197, 327);
             this.OKButton.Name = "OKButton";
             this.OKButton.Size = new System.Drawing.Size(75, 23);
             this.OKButton.TabIndex = 4;
@@ -86,7 +89,7 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(116, 150);
+            this.CancelButton.Location = new System.Drawing.Point(116, 327);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(75, 23);
             this.CancelButton.TabIndex = 5;
@@ -94,11 +97,30 @@
             this.CancelButton.UseVisualStyleBackColor = true;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.SalesListView);
+            this.groupBox1.Location = new System.Drawing.Point(12, 92);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(260, 229);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Afbudsrejser";
+            // 
+            // SalesListView
+            // 
+            this.SalesListView.Location = new System.Drawing.Point(6, 19);
+            this.SalesListView.Name = "SalesListView";
+            this.SalesListView.Size = new System.Drawing.Size(248, 204);
+            this.SalesListView.TabIndex = 0;
+            this.SalesListView.UseCompatibleStateImageBehavior = false;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 185);
+            this.ClientSize = new System.Drawing.Size(284, 362);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.OKButton);
             this.Controls.Add(this.ToBox);
@@ -108,6 +130,7 @@
             this.Name = "MainWindow";
             this.Text = "Søg Rejse";
             this.Shown += new System.EventHandler(this.MainWindow_Shown);
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -121,6 +144,8 @@
         private System.Windows.Forms.ComboBox ToBox;
         private System.Windows.Forms.Button OKButton;
         private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ListView SalesListView;
     }
 }
 

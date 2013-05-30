@@ -35,6 +35,8 @@ namespace Forms_Client.View
         {
             FromBox.Items.Clear();
             _presenter.PopulateFromList();
+
+            _presenter.PopulateSalesListView();
         }
 
         /// <summary>
@@ -121,6 +123,8 @@ namespace Forms_Client.View
             ToBox.Items.AddRange(items);
         }
 
+        void UpdateListView(string to, string from, decimal price) { }
+
         /// <summary>
         /// Gets the text in the FromBox Combobox and makes it publicly visible
         /// </summary>
@@ -136,6 +140,7 @@ namespace Forms_Client.View
         {
             get { return ToBox.Text; }
         }
+
 
     }
 }

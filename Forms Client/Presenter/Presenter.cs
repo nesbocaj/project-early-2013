@@ -18,6 +18,8 @@ namespace Forms_Client.Presenter
         private static Presenter _instance = null;
         private bool _okButtonState = true;
         private Proxy _prox = null;
+        private BackgroundWorker _observer = null;
+        private bool _obsAllowed = true;
 
         private string[] _response = null;
         private string[] _filteredArray = null;
@@ -31,6 +33,7 @@ namespace Forms_Client.Presenter
         private Presenter()
         {
             _prox = new Proxy();
+            _observer = new BackgroundWorker();
         }
 
         /// <summary>
@@ -221,6 +224,50 @@ namespace Forms_Client.Presenter
         {
             _filteredArray = _response.Where(x => x != MainForm.FromBoxText).ToArray();
             MainForm.PopulateToBox(_filteredArray);
+        }
+
+        public void PopulateSalesListView()
+        {
+            Action<object, DoWorkEventArgs> doWork = (sender, e) =>
+            {
+                try
+                {
+                    _prox.Post("watch");
+                }
+                catch (SocketException se)
+                {
+                }
+
+                for (; ; )
+                {
+                    if (!_obsAllowed) 
+                        _prox.ObserverState = false;
+
+                    else if (!_prox.ObserverState && _obsAllowed) 
+                        _prox.ObserverState = true;
+
+                    if (!String.IsNullOrEmpty(_prox.ObserverResult))
+                    {
+                        e.Result = _prox.ObserverResult;
+                        _prox.ObserverResult = null;
+                        break;
+                    }
+                }
+
+            };
+
+            Action<object, RunWorkerCompletedEventArgs> runWorkerCompleted = (sender, e) =>
+            {
+                var response = TCP_Shared.Response<Tuple<string, string, decimal>>
+                    .FromSerialized(e.Result as string);
+
+                MainForm.UpdateListView(
+                    response.Value.Item1, response.Value.Item2, response.Value.Item3);
+            };
+
+            _observer.DoWork += new DoWorkEventHandler(doWork);
+            _observer.RunWorkerCompleted += new RunWorkerCompletedEventHandler(runWorkerCompleted);
+            _observer.RunWorkerAsync();
         }
         #endregion
     }
