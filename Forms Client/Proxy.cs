@@ -19,11 +19,15 @@ namespace Forms_Client
         /// <summary>
         /// Constructs an instance of the proxy
         /// </summary>
-        public Proxy() { }
+        public Proxy() {
+            ObserverTCP = new TcpClient();
+        }
 
         public bool ObserverState { get; set; }
 
         public string ObserverResult { get; set; }
+
+        public TcpClient ObserverTCP { get; set; }
 
         /// <summary>
         /// Handles a client request to the server, 
@@ -35,22 +39,9 @@ namespace Forms_Client
         {
             var tcp = new TcpClient();
             string txt = "";
-            SocketException ex = null;
+            SocketException se = null;
 
-            for (int i = 0; i < 10 && !tcp.Connected; i++)
-            {
-                try
-                {
-                    tcp.Connect(IPAddress.Parse("127.0.0.1"), 7000);
-                    break;
-                }
-                catch (SocketException se) 
-                {
-                    ex = se;
-                    continue;
-                }
-                
-            }
+            Connect(tcp, out se);
 
             if (tcp.Connected)
             {
@@ -61,14 +52,63 @@ namespace Forms_Client
                 binWriter.Write(command);
                 txt = binReader.ReadString();
             }
-            else throw ex;
+            else throw se;
 
             return txt;
         }
 
         public void Post(string command)
         {
+            SocketException se = null;
 
-        } 
+            Connect(ObserverTCP, out se);
+
+            if (ObserverTCP.Connected)
+            {
+                var stream = ObserverTCP.GetStream();
+                var writer = new BinaryWriter(stream);
+                writer.Write(command);
+
+                ObserverTCP.Close();
+            }
+            else throw se;
+        }
+
+        public void Observe()
+        {
+            SocketException se = null;
+
+            Connect(ObserverTCP, out se);
+
+            while (ObserverTCP.Connected)
+            {
+                if (ObserverTCP.Available > 0)
+                {
+                    var stream = ObserverTCP.GetStream();
+                    var reader = new BinaryReader(stream);
+                    ObserverResult = reader.ReadString();
+                    break;
+                }
+            }
+        }
+
+        private void Connect(TcpClient client, out SocketException ex)
+        {
+            ex = default(SocketException);
+
+            for (int i = 0; i < 10 && !client.Connected; i++)
+            {
+                try
+                {
+                    client.Connect(IPAddress.Parse("127.0.0.1"), 7000);
+                    break;
+                }
+                catch (SocketException se)
+                {
+                    ex = se;
+                    continue;
+                }
+            }
+        }
     }
 }

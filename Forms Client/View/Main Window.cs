@@ -123,7 +123,7 @@ namespace Forms_Client.View
             ToBox.Items.AddRange(items);
         }
 
-        void UpdateListView(string to, string from, decimal price) { }
+        public void UpdateListView(string to, string from, decimal price) { }
 
         /// <summary>
         /// Gets the text in the FromBox Combobox and makes it publicly visible

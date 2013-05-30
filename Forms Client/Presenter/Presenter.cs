@@ -80,7 +80,9 @@ namespace Forms_Client.Presenter
             {
                 try
                 {
+                    _obsAllowed = false;
                     e.Result = _prox.Request(command);
+                    _obsAllowed = true;
                 }
                 catch (SocketException se)
                 {
@@ -238,13 +240,21 @@ namespace Forms_Client.Presenter
                 {
                 }
 
-                for (; ; )
-                {
-                    if (!_obsAllowed) 
-                        _prox.ObserverState = false;
+                var observeWorker = new Thread(_prox.Observe);
+                observeWorker.Name = "Observe Worker";
 
-                    else if (!_prox.ObserverState && _obsAllowed) 
-                        _prox.ObserverState = true;
+                while(true)
+                {
+                    if (_prox.ObserverTCP.Connected && !_obsAllowed)
+                        observeWorker.Suspend();
+
+                    else if (!_prox.ObserverTCP.Connected && _obsAllowed)
+                    {
+                        if (observeWorker.ThreadState == System.Threading.ThreadState.Suspended)
+                            observeWorker.Resume();
+                        else if (observeWorker.ThreadState == System.Threading.ThreadState.Unstarted)
+                            observeWorker.Start();
+                    }
 
                     if (!String.IsNullOrEmpty(_prox.ObserverResult))
                     {
@@ -263,6 +273,8 @@ namespace Forms_Client.Presenter
 
                 MainForm.UpdateListView(
                     response.Value.Item1, response.Value.Item2, response.Value.Item3);
+                //Thread.CurrentThread.Start();
+                //_observer.Dispose();
             };
 
             _observer.DoWork += new DoWorkEventHandler(doWork);
