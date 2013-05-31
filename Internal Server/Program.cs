@@ -18,7 +18,7 @@ namespace Internal_Server
     {
         private TcpConnection _connection;
         private CityGraph _graph;
-        private Thread _discountWorker, _removeWorker;
+        private Thread _discountWorker, _removeWorker, _listenWorker;
 
         private Program()
         {
@@ -30,41 +30,17 @@ namespace Internal_Server
             var soapHost = new ServiceHost(typeof(SOAPService));
             soapHost.BeginOpen(null, soapHost);
 
-            var listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 7000);
-            listener.Start();
-            EndPoint remote = null;
-
             _discountWorker = new Thread(() => ApplyDiscounts());
             _discountWorker.Name = "Discount Worker";
             _discountWorker.Start();
 
-            _removeWorker = new Thread(() => ApplyDiscounts());
+            _removeWorker = new Thread(ApplyDiscounts);
             _removeWorker.Name = "Remove Worker";
             _removeWorker.Start();
 
-            while (true)
-            {
-                try
-                {
-                    var current = listener.AcceptSocket();
-                    remote = current.RemoteEndPoint;
-
-                    Console.WriteLine("200 OK - Connection accepted from {0}",
-                        remote);
-
-                    var clientThread = new Thread(() => _connection.ManageClient(current));
-                    clientThread.Start();
-                }
-                catch (SocketException se)
-                {
-                    if (remote == null)
-                        Console.WriteLine("410 GONE - Connection not established");
-                    else
-                        Console.WriteLine("410 GONE - Connection with {0} was interrupted",
-                            remote);
-                    Debug.WriteLine(se.Message);
-                }
-            }
+            _listenWorker = new Thread(Listen);
+            _listenWorker.Name = "Listen Worker";
+            _listenWorker.Start();
         }
 
         static void Main(string[] args)
@@ -91,6 +67,37 @@ namespace Internal_Server
             _graph.RemoveEdges("Tirana", "Sarajevo");
             var result = _graph.FindCheapestPath("Tirana", "Nicosia");
             var result2 = _graph.FindCheapestPath("Tirana", "Sofia");
+        }
+
+        private void Listen()
+        {
+            var listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 7000);
+            listener.Start();
+            EndPoint remote = null;
+
+            while (true)
+            {
+                try
+                {
+                    var current = listener.AcceptSocket();
+                    remote = current.RemoteEndPoint;
+
+                    Console.WriteLine("200 OK - Connection accepted from {0}",
+                        remote);
+
+                    var clientThread = new Thread(() => _connection.ManageClient(current));
+                    clientThread.Start();
+                }
+                catch (SocketException se)
+                {
+                    if (remote == null)
+                        Console.WriteLine("410 GONE - Connection not established");
+                    else
+                        Console.WriteLine("410 GONE - Connection with {0} was interrupted",
+                            remote);
+                    Debug.WriteLine(se.Message);
+                }
+            }
         }
 
         /// <summary>
@@ -121,8 +128,6 @@ namespace Internal_Server
         /// </summary>
         private void RemoveEdges()
         {
-            Thread.Sleep(1000 * 60);
-
             while (true)
             {
                 _graph.ApplyDiscountRandomly();

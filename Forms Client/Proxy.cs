@@ -68,8 +68,6 @@ namespace Forms_Client
                 var stream = ObserverTCP.GetStream();
                 var writer = new BinaryWriter(stream);
                 writer.Write(command);
-
-                ObserverTCP.Close();
             }
             else throw se;
         }

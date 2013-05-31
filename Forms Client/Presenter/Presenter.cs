@@ -245,7 +245,7 @@ namespace Forms_Client.Presenter
 
                 while(true)
                 {
-                    if (_prox.ObserverTCP.Connected && !_obsAllowed)
+                    if (observeWorker.ThreadState == System.Threading.ThreadState.Running && !_obsAllowed)
                         observeWorker.Suspend();
 
                     else if (!_prox.ObserverTCP.Connected && _obsAllowed)
